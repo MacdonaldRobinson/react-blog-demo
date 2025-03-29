@@ -25,9 +25,9 @@ jobs:
         run: npm run build # Vite outputs the build to the "dist" folder by default
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/deploy-pages@v2
         with:
-          publish_dir: ./dist # The folder where Vite outputs the built files
-          publish_branch: gh-pages # Deploy to the gh-pages branch
+          branch: gh-pages # The branch to deploy to (it will create the branch if it doesn't exist)
+          folder: ./dist # The folder where Vite outputs the built files
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Authentication for pushing to gh-pages
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
