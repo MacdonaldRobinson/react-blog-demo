@@ -27,6 +27,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: dist # Specify the build folder
+          publish_dir: ./dist # Correct input for specifying build folder
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
