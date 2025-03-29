@@ -5,6 +5,11 @@ on:
     branches:
       - master # Trigger deployment on push to the master branch
 
+permissions:
+  contents: read # Allow reading the repository contents
+  pages: write # Allow writing to the Pages branch
+  id-token: write # Allow issuing ID tokens for authentication
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,7 +32,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
         with:
-          branch: gh-pages # The branch to deploy to (it will create the branch if it doesn't exist)
-          folder: ./dist # The folder where Vite outputs the built files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
+          token: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
+          preview: true # Optional: enable a preview deployment
