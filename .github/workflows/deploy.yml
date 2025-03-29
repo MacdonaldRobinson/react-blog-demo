@@ -33,4 +33,4 @@ jobs:
         uses: actions/deploy-pages@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
-          preview: true # Optional: enable a preview deployment
+          publish_dir: ./dist # Deploy the contents of the "dist" folder to GitHub Pages
