@@ -7,11 +7,11 @@ on:
 
 permissions:
   contents: read  # Allow reading the repository contents
-  pages: write  # Allow writing to the Pages branch
-  id-token: write  # Allow issuing ID tokens for authentication
+  pages: write    # Allow writing to the Pages branch
+  id-token: write # Allow issuing ID tokens for authentication
 
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18  # You can change this to match your Node.js version
+          node-version: 18  # Ensure this matches your project's Node.js version
 
       - name: Install dependencies
         run: npm install
@@ -29,12 +29,15 @@ jobs:
       - name: Build project
         run: npm run build  # Vite outputs the build to the "dist" folder by default
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload build artifacts
+        uses: actions/upload-pages-artifact@v1
         with:
-          path: ./dist  # The folder where Vite outputs the build files
+          path: ./dist  # Path to the build output directory
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub token for authentication
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub token for authentication
