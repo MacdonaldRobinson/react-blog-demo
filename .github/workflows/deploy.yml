@@ -3,12 +3,12 @@ name: Deploy Vite React App to GitHub Pages
 on:
   push:
     branches:
-      - master # Trigger deployment on push to the master branch
+      - master  # Trigger deployment on push to the master branch
 
 permissions:
-  contents: read # Allow reading the repository contents
-  pages: write # Allow writing to the Pages branch
-  id-token: write # Allow issuing ID tokens for authentication
+  contents: read  # Allow reading the repository contents
+  pages: write  # Allow writing to the Pages branch
+  id-token: write  # Allow issuing ID tokens for authentication
 
 jobs:
   deploy:
@@ -21,16 +21,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # You can change this to match your Node.js version
+          node-version: 18  # You can change this to match your Node.js version
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        run: npm run build # Vite outputs the build to the "dist" folder by default
+        run: npm run build  # Vite outputs the build to the "dist" folder by default
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./dist  # The folder where Vite outputs the build files
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token for authentication
-          publish_dir: ./dist # Deploy the contents of the "dist" folder to GitHub Pages.
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub token for authentication
