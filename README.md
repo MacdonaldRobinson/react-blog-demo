@@ -1,4 +1,4 @@
-# REact Blog Demo Site
+# React Blog Demo Site
 
 A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 
