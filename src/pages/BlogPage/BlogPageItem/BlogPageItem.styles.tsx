@@ -4,8 +4,8 @@ export const BlogPageItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 30vw;
-  height: 30vw;
+  width: 20vw;
+  height: 20vw;
   position: relative;
 `;
 
