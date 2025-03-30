@@ -10,24 +10,30 @@ const BlogPage = React.lazy(() => import("../src/pages/BlogPage/BlogPage"));
 
 const queryClient = new QueryClient();
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <PageLayout>
-        <HomePage />
-      </PageLayout>
-    ),
-  },
-  {
-    path: "/blog",
-    element: (
-      <PageLayout>
-        <BlogPage />
-      </PageLayout>
-    ),
-  },
-]);
+// Dynamically determine the base path from the environment variable or use '/' by default
+const basePath = import.meta.env.VITE_BASE_PATH || "/";
+
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: (
+        <PageLayout>
+          <HomePage />
+        </PageLayout>
+      ),
+    },
+    {
+      path: "/blog",
+      element: (
+        <PageLayout>
+          <BlogPage />
+        </PageLayout>
+      ),
+    },
+  ],
+  { basename: basePath }
+);
 
 function App() {
   return (
