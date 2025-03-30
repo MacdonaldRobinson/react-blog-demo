@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WrapWithBgImage > Snapshot compare 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-dQkurY gYBnTt"
+  >
+    <img
+      class="sc-VHjGu dxEIAc"
+      loading="lazy"
+      src="http://imgul"
+    />
+    <div
+      class="sc-gnOvAp ArvQF"
+    >
+      test
+    </div>
+  </div>
+</DocumentFragment>
+`;
