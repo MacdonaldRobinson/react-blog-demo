@@ -4,7 +4,7 @@ A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 
 ## Showcases the following:
 - React Router Dom
-- Lazy Loading of Pages using React.Lazy as Suspense
+- Lazy Loading of Pages using React.Lazy and Suspense
 - Using React.memo
 - Using Callbacks
 - Using React Context
