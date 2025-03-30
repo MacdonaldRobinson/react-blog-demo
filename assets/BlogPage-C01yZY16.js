@@ -1,4 +1,4 @@
-import{d as o,r as c,j as t,R as w,B as v}from"./index-Bh7HLRCV.js";import{c as j,a as b,W as y}from"./WrapWithBgImage-DL_rnNbW.js";const C=o.div``,P=o.div`
+import{d as o,r as c,j as t,R as w,B as v}from"./index-BgEppF-4.js";import{c as j,a as b,W as y}from"./WrapWithBgImage-CKnhV2wQ.js";const C=o.div``,P=o.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -119,8 +119,8 @@ import{d as o,r as c,j as t,R as w,B as v}from"./index-Bh7HLRCV.js";import{c as 
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 30vw;
-  height: 30vw;
+  width: 20vw;
+  height: 20vw;
   position: relative;
 `,I=o.div`
   display: flex;
