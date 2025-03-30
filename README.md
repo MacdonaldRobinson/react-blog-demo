@@ -6,7 +6,7 @@ A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 - React Router Dom
 - React Context
 - React Context Provider
-- Custom Hooks
+- Custom Hook to load blog posts from an API
 - Styled Component
 - React Query
 - Axios
