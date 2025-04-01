@@ -24,7 +24,7 @@ jobs:
                   node-version: 18 # Ensure this matches your project's Node.js version
 
             - name: Cache Node modules
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               with:
                   path: ~/.npm # Cache node modules to speed up installs
                   key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -35,7 +35,7 @@ jobs:
               run: npm install
 
             - name: Cache Playwright browsers
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               with:
                   path: ~/.cache/ms-playwright # Cache Playwright browser binaries
                   key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('**/package-lock.json') }}
