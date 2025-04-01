@@ -17,7 +17,7 @@ export const PopupModalBackDrop = styled.div`
 
 export const PopupModalWindow = styled.div`
     width: 80vw;
-    height: 20vh;
+    height: 30vh;
     transform: scale(0);
     display: flex;
     flex-direction: column;
