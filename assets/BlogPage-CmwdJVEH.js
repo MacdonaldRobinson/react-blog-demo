@@ -1,4 +1,4 @@
-import{d as o,r as p,j as t,R as w,B as v}from"./index-DlopEd3Q.js";import{c as j,a as b,W as y}from"./WrapWithBgImage-CLqfwmSc.js";const P=o.div`
+import{d as o,r as p,j as t,R as w,B as v}from"./index-B6Smc-K9.js";import{c as j,a as b,W as y}from"./WrapWithBgImage-NviqoRAP.js";const P=o.div`
     padding: 10px;
 `,B=o.div`
     display: flex;
@@ -168,7 +168,7 @@ import{d as o,r as p,j as t,R as w,B as v}from"./index-DlopEd3Q.js";import{c as 
     color: white;
 `,E=o.div`
     width: 80vw;
-    height: 20vh;
+    height: 30vh;
     transform: scale(0);
     display: flex;
     flex-direction: column;
