@@ -47,6 +47,11 @@ const BlogPage = () => {
             <fieldset>
                 <label>Blog Posts: {blogPosts.length}</label>
                 <BlogPagePostsWrapper>
+                    {blogContext.isLoading && <>Loading ...</>}
+                    {blogContext.isError && <>Error Loading</>}
+                    {!blogContext.isLoading && blogPosts.length == 0 && (
+                        <>No blog posts found</>
+                    )}
                     {blogPosts.map((blogPost: TPost) => {
                         return (
                             <BlogPageItem

@@ -1,37 +1,49 @@
+import { useState } from "react";
 import WrapWithBgImage from "../WrapWithBgImage/WrapWithBgImage";
 import {
-  PopupModalBackDrop,
-  PopupModalWindow,
-  PopupModalWindowClose,
-  PopupModalWindowContent,
-  PopupModalWindowTitle,
+    PopupModalBackDrop,
+    PopupModalWindow,
+    PopupModalWindowClose,
+    PopupModalWindowContent,
+    PopupModalWindowTitle,
 } from "./PopupModal.styles";
+import clsx from "clsx";
 
 export type TPopupModal = {
-  title: string;
-  content: string;
-  bgImageUrl: string;
-  onPopupModelCloseCallback: () => void;
+    title: string;
+    content: string;
+    bgImageUrl: string;
+    onPopupModelCloseCallback: () => void;
 };
 const PopupModal = ({
-  title,
-  content,
-  bgImageUrl,
-  onPopupModelCloseCallback,
+    title,
+    content,
+    bgImageUrl,
+    onPopupModelCloseCallback,
 }: TPopupModal) => {
-  return (
-    <PopupModalBackDrop>
-      <PopupModalWindow>
-        <WrapWithBgImage bgImageUrl={bgImageUrl}>
-          <PopupModalWindowClose onClick={onPopupModelCloseCallback}>
-            X Close
-          </PopupModalWindowClose>
-          <PopupModalWindowTitle>{title}</PopupModalWindowTitle>
-          <PopupModalWindowContent>{content}</PopupModalWindowContent>
-        </WrapWithBgImage>
-      </PopupModalWindow>
-    </PopupModalBackDrop>
-  );
+    const [showPopupWindow, setShowPopupWindow] = useState<boolean>();
+
+    const handleOnImageLoaded = () => {
+        setShowPopupWindow(true);
+    };
+
+    return (
+        <PopupModalBackDrop>
+            {!showPopupWindow && <>Loading...</>}
+            <PopupModalWindow className={clsx({ show: showPopupWindow })}>
+                <WrapWithBgImage
+                    bgImageUrl={bgImageUrl}
+                    onImageLoaded={handleOnImageLoaded}
+                >
+                    <PopupModalWindowClose onClick={onPopupModelCloseCallback}>
+                        X Close
+                    </PopupModalWindowClose>
+                    <PopupModalWindowTitle>{title}</PopupModalWindowTitle>
+                    <PopupModalWindowContent>{content}</PopupModalWindowContent>
+                </WrapWithBgImage>
+            </PopupModalWindow>
+        </PopupModalBackDrop>
+    );
 };
 
 export default PopupModal;
