@@ -1,39 +1,39 @@
 name: Deploy Vite React App to GitHub Pages
 
 on:
-  push:
-    branches:
-      - master # Trigger deployment on push to the master branch
+    push:
+        branches:
+            - master # Trigger deployment on push to the master branch
 
 permissions:
-  contents: write # Allow writing to the repository contents
-  pages: write # Allow writing to the Pages branch
-  id-token: write # Allow issuing ID tokens for authentication
+    contents: write # Allow writing to the repository contents
+    pages: write # Allow writing to the Pages branch
+    id-token: write # Allow issuing ID tokens for authentication
 
 jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
+    build_and_deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18 # Ensure this matches your project's Node.js version
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18 # Ensure this matches your project's Node.js version
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Run tests with Vitest
-        run: npm run test
+            - name: Run tests with Vitest
+              run: npm run test:all
 
-      - name: Build project
-        run: npm run build # Vite outputs the build to the "dist" folder by default
+            - name: Build project
+              run: npm run build # Vite outputs the build to the "dist" folder by default
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+            - name: Deploy to GitHub Pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./dist

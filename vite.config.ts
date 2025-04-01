@@ -12,6 +12,8 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     base: env.VITE_BASE_PATH || '/', // Set the base path dynamically from the environment variable
     test: {
+      include: ["./src/**/*.test.*"],
+      exclude: ["./tests/e2e/*"],
       environment: 'jsdom',
       globals: true,         // Enable global test functions      
       setupFiles: './src/setupTests.ts',
