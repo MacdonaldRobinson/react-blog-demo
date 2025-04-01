@@ -18,4 +18,4 @@ A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 - Using vitest, jsdom, testing library, msw ( Mock Service Worker )
 - Filter Blog Posts and highlight the filterText in the blog content, as it filters the list, it highligts the words
 - Dynamicly changing the base path based on the environment ( VITE_ environment variables from .env file based on environment)
-- Using github workflow to deploy to github pages
+- Using github workflow to deploy to run tests before build and deploying to github pages
