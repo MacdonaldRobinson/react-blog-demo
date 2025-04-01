@@ -45,7 +45,8 @@ jobs:
             # This step only installs browsers if the cache was missed
             - name: Install Playwright Browsers (if not cached)
               run: |
-                  if [ ! -d "~/.cache/ms-playwright" ]; then
+                  PLAYWRIGHT_CACHE_DIR="/home/runner/.cache/ms-playwright"
+                  if [ ! -d "$PLAYWRIGHT_CACHE_DIR" ]; then
                     echo "Playwright browsers not found, installing...";
                     npx playwright install --with-deps;
                   else
