@@ -12,6 +12,7 @@ import {
 import clsx from "clsx";
 
 export type TCard = {
+    title: string;
     bgImageUrl: string;
     children: React.ReactNode;
     backFaceContent?: React.ReactNode;
@@ -20,6 +21,7 @@ export type TCard = {
 
 const Card = React.memo(
     ({
+        title,
         bgImageUrl,
         children,
         backFaceContent,
@@ -49,6 +51,7 @@ const Card = React.memo(
                         src={bgImageUrl}
                         onLoad={handleBgImageLoad}
                         loading="lazy"
+                        alt={title}
                     />
                     <FrontFaceContentWrapper>
                         {frontFaceHeaderContent && (
@@ -65,6 +68,7 @@ const Card = React.memo(
                             src={bgImageUrl}
                             onLoad={handleBgImageLoad}
                             loading="lazy"
+                            alt={title}
                         />
                         <BackFaceContentWrapper>
                             <div>{backFaceContent}</div>

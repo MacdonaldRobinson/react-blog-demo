@@ -18,6 +18,7 @@ const BlogPageItem = React.memo(
         return (
             <BlogPageItemWrapper>
                 <Card
+                    title={blogPost.title}
                     bgImageUrl={`https://via.assets.so/game.png?id=${blogPost.id}&q=95&w=360&h=360&fit=fill`}
                     backFaceContent={
                         filterText ? (
