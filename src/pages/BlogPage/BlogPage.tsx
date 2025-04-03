@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import BlogContext, { TPost } from "../../contexts/BlogContext/BlogContext";
 import {
     BlogFilterWrapper,
@@ -26,9 +26,9 @@ const BlogPage = () => {
         setFilterText(e?.currentTarget.value ?? "");
     };
 
-    const handlePopupBlogPost = (blogPost: TPost) => {
+    const handlePopupBlogPost = useCallback((blogPost: TPost) => {
         setPopupBlogPost(blogPost);
-    };
+    }, []);
 
     const handlePopupModelCloseCallback = () => {
         setPopupBlogPost(null);
