@@ -12,7 +12,7 @@ describe("WrapWithBgImage", () => {
 
     it("Must lazy load image", () => {
         const { container } = render(
-            <WrapWithBgImage bgImageUrl={"http://imgul"}>
+            <WrapWithBgImage bgImageUrl={"http://imgul"} altText="title">
                 test content
             </WrapWithBgImage>
         );

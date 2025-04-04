@@ -34,6 +34,7 @@ const PopupModal = ({
                 <WrapWithBgImage
                     bgImageUrl={bgImageUrl}
                     onImageLoaded={handleOnImageLoaded}
+                    altText={title}
                 >
                     <PopupModalWindowClose onClick={onPopupModelCloseCallback}>
                         X Close
