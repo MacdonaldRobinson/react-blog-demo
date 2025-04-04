@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import BlogContext, { TPost } from "../../contexts/BlogContext/BlogContext";
 import {
     BlogFilterWrapper,
@@ -7,18 +7,44 @@ import {
 } from "./BlogPage.styles";
 import BlogPageItem from "./BlogPageItem/BlogPageItem";
 import PopupModal from "../../components/PopupModal/PopupModal";
-
+import { debounce } from "lodash";
 const BlogPage = () => {
     const blogContext = useContext(BlogContext);
     const [filterText, setFilterText] = useState<string>("");
     const [popupBlogPost, setPopupBlogPost] = useState<TPost | null>(null);
+    const [filteredBlogPosts, setFilteredBlogPosts] = useState<TPost[]>(
+        blogContext.blogPosts
+    );
 
-    const blogPosts = blogContext.blogPosts.filter((blogPosts: TPost) => {
-        if (blogPosts.body.toLowerCase().includes(filterText.toLowerCase())) {
-            return true;
-        }
-        return false;
-    });
+    const filterBlogPosts = useCallback(
+        (blogPosts: TPost[]) => {
+            return blogPosts.filter((blogPosts: TPost) => {
+                if (
+                    blogPosts.body
+                        .toLowerCase()
+                        .includes(filterText.toLowerCase())
+                ) {
+                    return true;
+                }
+                return false;
+            });
+        },
+        [filterText]
+    );
+
+    // UseEffect to debounce filtering
+    useEffect(() => {
+        // Debounced filter logic
+        const debouncedFilter = debounce(() => {
+            const filtered = filterBlogPosts(blogContext.blogPosts);
+            setFilteredBlogPosts(filtered);
+        }, 100);
+
+        debouncedFilter(); // Trigger the filter immediately after filterText change
+
+        // Cleanup debounce on component unmount or when dependencies change
+        return () => debouncedFilter.cancel();
+    }, [filterText, blogContext.blogPosts, filterBlogPosts]); // Dependency array for filterText and blogContext.blogPosts
 
     const handleFilterTextChanged = (
         e: React.FormEvent<HTMLInputElement> | undefined
@@ -45,14 +71,15 @@ const BlogPage = () => {
                 />
             </BlogFilterWrapper>
             <fieldset>
-                <label>Blog Posts: {blogPosts.length}</label>
+                <label>Blog Posts: {filteredBlogPosts.length}</label>
                 <BlogPagePostsWrapper>
                     {blogContext.isLoading && <>Loading ...</>}
                     {blogContext.isError && <>Error Loading</>}
-                    {!blogContext.isLoading && blogPosts.length == 0 && (
-                        <>No blog posts found</>
-                    )}
-                    {blogPosts.map((blogPost: TPost) => {
+                    {!blogContext.isLoading &&
+                        filteredBlogPosts.length == 0 && (
+                            <>No blog posts found</>
+                        )}
+                    {filteredBlogPosts.map((blogPost: TPost) => {
                         return (
                             <BlogPageItem
                                 key={blogPost.id}

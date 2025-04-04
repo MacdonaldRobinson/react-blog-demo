@@ -1,17 +1,18 @@
+import React from "react";
 import { HamburgerControlWrapper } from "./HamburgerControl.styles";
 
 export type THamburgerControl = {
-  onClick: () => void;
+    onClick: () => void;
 };
 
-const HamburgerControl = ({ onClick }: THamburgerControl) => {
-  return (
-    <HamburgerControlWrapper onClick={onClick}>
-      <span></span>
-      <span></span>
-      <span></span>
-    </HamburgerControlWrapper>
-  );
-};
+const HamburgerControl = React.memo(({ onClick }: THamburgerControl) => {
+    return (
+        <HamburgerControlWrapper onClick={onClick}>
+            <span></span>
+            <span></span>
+            <span></span>
+        </HamburgerControlWrapper>
+    );
+});
 
 export default HamburgerControl;
