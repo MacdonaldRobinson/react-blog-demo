@@ -1,14 +1,14 @@
-import{d as e,R as i,j as t,r as l,B as c}from"./index-DbPLNrKi.js";import{W as d}from"./WrapWithBgImage-Bpo5By0J.js";const m=e.section`
+import{d as e,R as i,j as t,r as l,B as c,T as d,M as m}from"./index-BtD0mluV.js";import{W as p}from"./WrapWithBgImage-UvROzTVS.js";const g=e.section`
   height: 90vh;
-`,p=e.div`
+`,h=e.div`
   height: 100%;
   overflow: auto;
   scrollbar-width: thin;
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-`,n=e.h3`
+`,r=e.h3`
   font-size: 2rem;
-`,a=e.div``,g=e.div`
+`,n=e.div``,x=e.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -43,8 +43,8 @@ import{d as e,R as i,j as t,r as l,B as c}from"./index-DbPLNrKi.js";import{W as 
     }
   }
 
-  ${n}, ${a} {
+  ${r}, ${n} {
     opacity: 0;
     animation: slideInDown 1s 0.5s forwards;
   }
-`,h=i.memo(({blogPost:o,bgImageUrl:s})=>t.jsx(d,{bgImageUrl:s,children:t.jsxs(g,{children:[t.jsx(n,{children:o.title}),t.jsx(a,{children:o.body})]})})),y=()=>{const s=l.useContext(c).blogPosts;return t.jsx(m,{children:t.jsx(p,{children:s.map(r=>t.jsx(h,{blogPost:r,bgImageUrl:`https://via.assets.so/game.png?id=${r.id}&q=95&w=360&h=360&fit=fill`},r.id))})})};export{y as default};
+`,f=i.memo(({blogPost:o,bgImageUrl:s})=>t.jsx(p,{bgImageUrl:s,altText:o.title,children:t.jsxs(x,{children:[t.jsx(r,{children:o.title}),t.jsx(n,{children:o.body})]})})),u=()=>{const s=l.useContext(c).blogPosts;return t.jsxs(g,{children:[t.jsx(d,{children:"Home Page Title"}),t.jsx(m,{name:"description",content:"Home Page"}),t.jsx(h,{children:s.map(a=>t.jsx(f,{blogPost:a,bgImageUrl:`https://via.assets.so/game.png?id=${a.id}&q=95&w=360&h=360&fit=fill`},a.id))})]})};export{u as default};
