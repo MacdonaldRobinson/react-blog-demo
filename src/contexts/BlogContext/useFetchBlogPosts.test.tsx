@@ -9,27 +9,27 @@ import { renderHook, waitFor } from "@testing-library/react";
 import useFetchBlogPosts from "./useFetchBlogPosts";
 
 const handlers = [
-  http.get("https://dummyjson.com/posts", () => {
-    return HttpResponse.json<TBlogPostsQueryResponse>({
-      posts: [
-        {
-          id: 0,
-          title: "Test1",
-          body: "Test Body",
-          tags: [],
-          reactions: {
-            likes: 0,
-            dislikes: 0,
-          },
-          views: 0,
-          userId: 0,
-        },
-      ],
-      total: 0,
-      skip: 0,
-      limit: 0,
-    });
-  }),
+    http.get("https://dummyjson.com/posts", () => {
+        return HttpResponse.json<TBlogPostsQueryResponse>({
+            posts: [
+                {
+                    id: 0,
+                    title: "Test1",
+                    body: "Test Body",
+                    tags: [],
+                    reactions: {
+                        likes: 0,
+                        dislikes: 0,
+                    },
+                    views: 0,
+                    userId: 0,
+                },
+            ],
+            total: 0,
+            skip: 0,
+            limit: 0,
+        });
+    }),
 ];
 
 const server = setupServer(...handlers);
@@ -41,18 +41,20 @@ afterAll(() => server.close());
 const queryClient = new QueryClient();
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            {children}
+        </QueryClientProvider>
+    );
 };
 
 test("useFetchBlogPosts request make request", async () => {
-  const { result } = renderHook(() => useFetchBlogPosts(), {
-    wrapper: wrapper,
-  });
+    const { result } = renderHook(() => useFetchBlogPosts(), {
+        wrapper: wrapper,
+    });
 
-  await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-  expect(result.current.data?.posts.length).toBe(1);
-  expect(result.current.data?.posts[0].title).toBe("Test1");
+    expect(result.current.data?.posts.length).toBe(1);
+    expect(result.current.data?.posts[0].title).toBe("Test1");
 });

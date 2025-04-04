@@ -8,7 +8,7 @@ import {
 import BlogPageItem from "./BlogPageItem/BlogPageItem";
 import PopupModal from "../../components/PopupModal/PopupModal";
 import { debounce } from "lodash";
-import { Helmet } from "react-helmet";
+import { Meta, Title } from "react-head";
 const BlogPage = () => {
     const blogContext = useContext(BlogContext);
     const [filterText, setFilterText] = useState<string>("");
@@ -63,10 +63,8 @@ const BlogPage = () => {
 
     return (
         <BlogPageWrapper>
-            <Helmet>
-                <title>Blog Page Title</title>
-                <meta name="description" content="Blog Page" />
-            </Helmet>
+            <Title>Blog Page Title</Title>
+            <Meta name="description" content="Blog Page" />
             <BlogFilterWrapper>
                 <label htmlFor="BlogFilter">Filter Blog Posts</label>
                 <input

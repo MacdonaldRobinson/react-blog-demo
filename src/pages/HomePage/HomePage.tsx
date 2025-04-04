@@ -2,7 +2,7 @@ import { useContext } from "react";
 import BlogContext, { TPost } from "../../contexts/BlogContext/BlogContext";
 import { BlogPostSlidesWrapper, HomePageWrapper } from "./HomePage.styles";
 import BlogPostSlideItem from "./BlogPostSlideItem/BlogPostSlideItem";
-import { Helmet } from "react-helmet";
+import { Meta, Title } from "react-head";
 
 const HomePage = () => {
     const blogContext = useContext(BlogContext);
@@ -10,10 +10,8 @@ const HomePage = () => {
 
     return (
         <HomePageWrapper>
-            <Helmet>
-                <title>Home Page Title</title>
-                <meta name="description" content="Home Page" />
-            </Helmet>
+            <Title>Home Page Title</Title>
+            <Meta name="description" content="Home Page" />
             <BlogPostSlidesWrapper>
                 {blogPosts.map((blogPost: TPost) => {
                     return (

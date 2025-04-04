@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React, { Suspense } from "react";
 import BlogContextProvider from "./contexts/BlogContext/BlogContextProvider";
 import PageLayout from "./pages/PageLayout/PageLayout";
+import { HeadProvider } from "react-head";
 
 const HomePage = React.lazy(() => import("../src/pages/HomePage/HomePage"));
 const BlogPage = React.lazy(() => import("../src/pages/BlogPage/BlogPage"));
@@ -37,13 +38,15 @@ const router = createBrowserRouter(
 
 function App() {
     return (
-        <QueryClientProvider client={queryClient}>
-            <BlogContextProvider>
-                <Suspense fallback={"Loading ..."}>
-                    <RouterProvider router={router} />
-                </Suspense>
-            </BlogContextProvider>
-        </QueryClientProvider>
+        <HeadProvider>
+            <QueryClientProvider client={queryClient}>
+                <BlogContextProvider>
+                    <Suspense fallback={"Loading ..."}>
+                        <RouterProvider router={router} />
+                    </Suspense>
+                </BlogContextProvider>
+            </QueryClientProvider>
+        </HeadProvider>
     );
 }
 
