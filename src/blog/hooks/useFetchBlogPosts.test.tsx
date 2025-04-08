@@ -1,6 +1,6 @@
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
-import { TBlogPostsQueryResponse } from "./BlogContext";
+import { TBlogPostsQueryResponse } from "../contexts/BlogContext/BlogContext";
 import { afterAll, beforeAll, expect, test } from "vitest";
 import { afterEach } from "node:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

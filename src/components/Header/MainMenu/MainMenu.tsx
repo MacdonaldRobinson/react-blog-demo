@@ -11,6 +11,9 @@ const MainMenu = () => {
                 <li>
                     <NavLink to={"/blog"}>Blog</NavLink>
                 </li>
+                <li>
+                    <NavLink to={"/chat"}>Chat</NavLink>
+                </li>
             </ul>
         </MainMenuWrapper>
     );

@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "../../../components/Card/Card";
 import HighlightText from "../../../components/HighlightText/HighlightText";
-import { TPost } from "../../../contexts/BlogContext/BlogContext";
+import { TPost } from "../../../blog/contexts/BlogContext/BlogContext";
 import {
     BlogPageItemWrapper,
     BlogPostPopupWrapper,

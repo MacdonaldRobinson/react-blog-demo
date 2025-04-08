@@ -2,12 +2,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React, { Suspense } from "react";
-import BlogContextProvider from "./contexts/BlogContext/BlogContextProvider";
+import BlogContextProvider from "./blog/contexts/BlogContext/BlogContextProvider";
 import PageLayout from "./pages/PageLayout/PageLayout";
 import { HeadProvider } from "react-head";
+import AuthContextProvider from "./auth/contexts/AuthContext/AuthContextProvider";
+import ChatContextProvider from "./chat/contexts/ChatContextProvider";
 
 const HomePage = React.lazy(() => import("../src/pages/HomePage/HomePage"));
 const BlogPage = React.lazy(() => import("../src/pages/BlogPage/BlogPage"));
+const ChatPage = React.lazy(() => import("../src/pages/ChatPage/ChatPage"));
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,14 @@ const router = createBrowserRouter(
                 </PageLayout>
             ),
         },
+        {
+            path: "/chat",
+            element: (
+                <PageLayout>
+                    <ChatPage />
+                </PageLayout>
+            ),
+        },
     ],
     { basename: basePath }
 );
@@ -39,13 +50,17 @@ const router = createBrowserRouter(
 function App() {
     return (
         <HeadProvider>
-            <QueryClientProvider client={queryClient}>
-                <BlogContextProvider>
-                    <Suspense fallback={"Loading ..."}>
-                        <RouterProvider router={router} />
-                    </Suspense>
-                </BlogContextProvider>
-            </QueryClientProvider>
+            <AuthContextProvider>
+                <ChatContextProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <BlogContextProvider>
+                            <Suspense fallback={"Loading ..."}>
+                                <RouterProvider router={router} />
+                            </Suspense>
+                        </BlogContextProvider>
+                    </QueryClientProvider>
+                </ChatContextProvider>
+            </AuthContextProvider>
         </HeadProvider>
     );
 }

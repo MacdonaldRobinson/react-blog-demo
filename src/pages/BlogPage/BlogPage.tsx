@@ -1,5 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import BlogContext, { TPost } from "../../contexts/BlogContext/BlogContext";
+import BlogContext, {
+    TPost,
+} from "../../blog/contexts/BlogContext/BlogContext";
 import {
     BlogFilterWrapper,
     BlogPagePostsWrapper,

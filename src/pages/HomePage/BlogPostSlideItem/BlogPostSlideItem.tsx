@@ -1,5 +1,5 @@
 import React from "react";
-import { TPost } from "../../../contexts/BlogContext/BlogContext";
+import { TPost } from "../../../blog/contexts/BlogContext/BlogContext";
 import {
     BlogPostSlideItemContent,
     BlogPostSlideItemTitle,

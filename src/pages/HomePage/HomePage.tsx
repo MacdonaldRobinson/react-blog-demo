@@ -1,5 +1,7 @@
 import { useContext } from "react";
-import BlogContext, { TPost } from "../../contexts/BlogContext/BlogContext";
+import BlogContext, {
+    TPost,
+} from "../../blog/contexts/BlogContext/BlogContext";
 import { BlogPostSlidesWrapper, HomePageWrapper } from "./HomePage.styles";
 import BlogPostSlideItem from "./BlogPostSlideItem/BlogPostSlideItem";
 import { Meta, Title } from "react-head";
