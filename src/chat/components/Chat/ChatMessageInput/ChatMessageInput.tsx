@@ -6,13 +6,18 @@ import {
 } from "./ChatMessageInput.styles";
 import useChatContext from "../../../hooks/useChatContext";
 
-const ChatMessageInput = () => {
+export type TChatMessageInput = {
+    userName: string;
+    setUserName: (newUserName: string) => void;
+};
+
+const ChatMessageInput = ({ userName, setUserName }: TChatMessageInput) => {
     const { sendMessage } = useChatContext();
 
     const [chatMessage, setChatMessage] = useState<TChatMessage>({
         id: "",
         message: "",
-        userName: "",
+        userName: userName,
         createdOn: new Date(),
     });
 
@@ -27,6 +32,7 @@ const ChatMessageInput = () => {
         };
 
         setChatMessage(newMessage);
+        setUserName(newMessage.userName);
     };
 
     const handleMessageInput = (

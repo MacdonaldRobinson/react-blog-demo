@@ -7,6 +7,7 @@ export type TChatContextProvider = {
 };
 
 const ChatContextProvider = ({ children }: TChatContextProvider) => {
+    const [userName, setUserName] = useState<string>("");
     const [chatMessages, setChatMessages] = useState<TChatMessage[]>();
     const { getChatMessages, sendMessage } = useFirebaseStore();
 
@@ -25,6 +26,8 @@ const ChatContextProvider = ({ children }: TChatContextProvider) => {
     };
 
     const newChatContext: TChatContext = {
+        userName: userName,
+        setUserName: setUserName,
         chatMessages: chatMessages ?? [],
         sendMessage: handleSendMessage,
     };

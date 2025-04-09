@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "deploy": "tsc -b && vite build --mode firebase && firebase deploy",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
@@ -41,7 +42,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
-    "jest-fixed-jsdom": "^0.0.9",
     "jsdom": "^26.0.0",
     "msw": "^2.7.3",
     "typescript": "~5.8.2",

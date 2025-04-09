@@ -29,9 +29,17 @@ export const ChatMessageWrapper = styled.div`
     font-size: 1rem;
 `;
 export const ChatMessageItemWrapper = styled.div`
-    border: 1px outset black;
-    background-color: lightgray;
-    border-radius: 10px;
+    border: 1px outset;
+    background-color: lightblue;
+    border-radius: 20px 0 20px 20px;
+    width: 50%;
     padding: 10px;
     white-space: pre-wrap;
+    align-self: flex-end;
+
+    &.me {
+        align-self: flex-start;
+        background-color: lightgreen;
+        border-radius: 20px 20px 20px 0;
+    }
 `;

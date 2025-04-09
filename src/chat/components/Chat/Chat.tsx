@@ -12,18 +12,26 @@ import {
 import ChatMessageInput from "./ChatMessageInput/ChatMessageInput";
 
 const Chat = () => {
-    const { chatMessages } = useChatContext();
+    const { userName, setUserName, chatMessages } = useChatContext();
 
     return (
         <ChatWrapper>
             <ChatMessagesFieldSet>
                 <ChatMessagesFieldSetLegend>
-                    Chat Messages:
+                    Chat Messages
                 </ChatMessagesFieldSetLegend>
                 <ChatMessagesWrapper>
                     {chatMessages.map((chatMessage: TChatMessage) => {
                         return (
-                            <ChatMessageItemWrapper key={chatMessage.id}>
+                            <ChatMessageItemWrapper
+                                key={chatMessage.id}
+                                className={
+                                    userName.toLowerCase() ==
+                                    chatMessage.userName.toLowerCase()
+                                        ? "me"
+                                        : "no-me"
+                                }
+                            >
                                 <ChatMessageUserNameWrapper>
                                     {chatMessage.userName}
                                 </ChatMessageUserNameWrapper>
@@ -35,7 +43,7 @@ const Chat = () => {
                     })}
                 </ChatMessagesWrapper>
             </ChatMessagesFieldSet>
-            <ChatMessageInput />
+            <ChatMessageInput userName={userName} setUserName={setUserName} />
         </ChatWrapper>
     );
 };

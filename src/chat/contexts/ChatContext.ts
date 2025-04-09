@@ -11,14 +11,21 @@ export const ChatMessageSchema = z.object({
 export type TChatMessage = z.infer<typeof ChatMessageSchema>;
 
 export type TChatContext = {
+    userName: string;
     chatMessages: TChatMessage[],
-    sendMessage: (chatMessage:TChatMessage)=>Promise<void>;
+    sendMessage: (chatMessage:TChatMessage)=>Promise<void>;    
+    setUserName: (newUserName: string) => void;
 }
 
 const ChatContext = createContext<TChatContext>({
+    userName: "",
     chatMessages: [],
-    sendMessage: async ()=>{
-        console.error("sendMessage is not implemented")
+    sendMessage: async () => {
+        console.error("sendMessage is not implemented");
+    },
+    setUserName: function (newUserName: string): void {
+        console.log(newUserName)
+        throw new Error("Function not implemented.");
     }
 })
 
