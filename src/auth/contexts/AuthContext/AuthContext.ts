@@ -1,14 +1,14 @@
 import { createContext } from "react";
 
 export type TAuthContext = {
-    useName:string;
+    userName:string;
     isAuthenticated: boolean;
     login: ()=>void;
     logout: ()=>void;    
 }
 
 const AuthContext = createContext<TAuthContext>({
-    useName:"",
+    userName:"",
     isAuthenticated: false,
     login: function (): void {
         throw new Error("Function not implemented.");

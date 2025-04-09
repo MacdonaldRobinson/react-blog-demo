@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TChatMessage } from "../../../contexts/ChatContext";
 import {
     ChatMessageInputItemWrapper,
@@ -20,6 +20,15 @@ const ChatMessageInput = ({ userName, setUserName }: TChatMessageInput) => {
         userName: userName,
         createdOn: new Date(),
     });
+
+    useEffect(() => {
+        setChatMessage((currentMessage) => {
+            return {
+                ...currentMessage,
+                userName: userName,
+            };
+        });
+    }, [userName]);
 
     const handleUserNameInput = (e: React.FormEvent<HTMLInputElement>) => {
         if (!e) return;

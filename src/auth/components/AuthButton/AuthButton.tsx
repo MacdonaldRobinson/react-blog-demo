@@ -2,7 +2,12 @@ import useAuthContext from "../../hooks/useAuthContext";
 import { AuthButtonWrapper, LoggedInWrapper } from "./AuthButton.styles";
 
 const AuthButton = () => {
-    const { isAuthenticated, login, logout, useName } = useAuthContext();
+    const {
+        isAuthenticated,
+        login,
+        logout,
+        userName: useName,
+    } = useAuthContext();
 
     const handleLogin = async () => {
         await login();

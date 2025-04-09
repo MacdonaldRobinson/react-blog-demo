@@ -17,7 +17,7 @@ const AuthContextProvider = ({ children }: TAuthContextProvider) => {
     };
 
     const newAuthContext: TAuthContext = {
-        useName: user?.user.displayName ?? "",
+        userName: user?.user.displayName ?? "",
         isAuthenticated: !!user,
         login: handleLogin,
         logout: handleLogout,

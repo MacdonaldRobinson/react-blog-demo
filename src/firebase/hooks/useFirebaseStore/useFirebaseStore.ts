@@ -1,9 +1,7 @@
 import useChatStore from "./collections/useChatStore/useChatStore";
 
 const useFirebaseStore = ()=>{    
-    const {getChatMessages, sendMessage} = useChatStore();
-
-    return {getChatMessages, sendMessage}
+    return {useChatStore}
 }
 
  export default useFirebaseStore;

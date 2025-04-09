@@ -15,6 +15,7 @@ export type TChatContext = {
     chatMessages: TChatMessage[],
     sendMessage: (chatMessage:TChatMessage)=>Promise<void>;    
     setUserName: (newUserName: string) => void;
+    onListenForUpdates: (newChatMessages: TChatMessage[])=>void;
 }
 
 const ChatContext = createContext<TChatContext>({
@@ -24,7 +25,11 @@ const ChatContext = createContext<TChatContext>({
         console.error("sendMessage is not implemented");
     },
     setUserName: function (newUserName: string): void {
-        console.log(newUserName)
+        console.log(newUserName);
+        throw new Error("Function not implemented.");
+    },
+    onListenForUpdates: function (newChatMessages: TChatMessage[]): void {
+        console.log(newChatMessages);
         throw new Error("Function not implemented.");
     }
 })

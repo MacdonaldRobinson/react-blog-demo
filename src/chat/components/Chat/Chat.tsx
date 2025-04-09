@@ -1,6 +1,11 @@
+import { useEffect, useRef } from "react";
+import useAuthContext from "../../../auth/hooks/useAuthContext";
 import { TChatMessage } from "../../contexts/ChatContext";
 import useChatContext from "../../hooks/useChatContext";
+import { format } from "date-fns";
+
 import {
+    ChatMessageDateWrapper,
     ChatMessageItemWrapper,
     ChatMessagesFieldSet,
     ChatMessagesFieldSetLegend,
@@ -12,7 +17,25 @@ import {
 import ChatMessageInput from "./ChatMessageInput/ChatMessageInput";
 
 const Chat = () => {
+    const { userName: authUserName } = useAuthContext();
     const { userName, setUserName, chatMessages } = useChatContext();
+    const chatMessagesRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollToLastMessage = () => {
+        (
+            chatMessagesRef.current?.lastChild as HTMLDivElement
+        )?.scrollIntoView();
+    };
+
+    useEffect(() => {
+        setUserName(authUserName);
+
+        console.log(authUserName);
+    }, [authUserName, setUserName]);
+
+    useEffect(() => {
+        scrollToLastMessage();
+    }, [chatMessages]);
 
     return (
         <ChatWrapper>
@@ -20,7 +43,7 @@ const Chat = () => {
                 <ChatMessagesFieldSetLegend>
                     Chat Messages
                 </ChatMessagesFieldSetLegend>
-                <ChatMessagesWrapper>
+                <ChatMessagesWrapper ref={chatMessagesRef}>
                     {chatMessages.map((chatMessage: TChatMessage) => {
                         return (
                             <ChatMessageItemWrapper
@@ -38,6 +61,12 @@ const Chat = () => {
                                 <ChatMessageWrapper>
                                     {chatMessage.message}
                                 </ChatMessageWrapper>
+                                <ChatMessageDateWrapper>
+                                    {format(
+                                        chatMessage.createdOn,
+                                        "yyyy-MM-dd hh:mm:ss"
+                                    )}
+                                </ChatMessageDateWrapper>
                             </ChatMessageItemWrapper>
                         );
                     })}

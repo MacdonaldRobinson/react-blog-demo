@@ -10,6 +10,8 @@ export const ChatMessagesFieldSet = styled.fieldset`
     padding: 10px;
     height: 50vh;
     overflow: auto;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
 `;
 export const ChatMessagesFieldSetLegend = styled.legend``;
 export const ChatMessagesWrapper = styled.div`
@@ -36,10 +38,19 @@ export const ChatMessageItemWrapper = styled.div`
     padding: 10px;
     white-space: pre-wrap;
     align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
     &.me {
         align-self: flex-start;
         background-color: lightgreen;
         border-radius: 20px 20px 20px 0;
     }
+`;
+
+export const ChatMessageDateWrapper = styled.div`
+    font-size: 0.7rem;
+    color: gray;
+    align-self: flex-end;
 `;
