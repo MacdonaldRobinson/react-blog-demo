@@ -13,6 +13,7 @@ A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 - Using Styled Component
 - Using React Query
 - Using Axios
+- Using Firebase ( Firestore, Auth )
 - Using CSS Animations ( transitions and keyframes )
 - Using CSS Scroll snap
 - Using vitest, jsdom, testing library, msw ( Mock Service Worker )
