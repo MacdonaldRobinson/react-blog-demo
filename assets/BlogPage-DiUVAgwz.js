@@ -1,4 +1,4 @@
-import{d as Q,R as Fi,r as Dn,j as L,c as sr,B as p0,T as _0,M as d0}from"./index-0Cf1_GoX.js";import{c as xo,a as v0,W as x0}from"./WrapWithBgImage-KbrbLWEc.js";const w0=Q.div`
+import{d as Q,R as Fi,r as Dn,j as L,c as sr,B as p0,T as _0,M as d0}from"./index-DD2V_l4N.js";import{c as xo,a as v0,W as x0}from"./WrapWithBgImage-DgHypE4F.js";const w0=Q.div`
     padding: 10px;
 `,A0=Q.div`
     display: flex;
@@ -141,19 +141,21 @@ import{d as Q,R as Fi,r as Dn,j as L,c as sr,B as p0,T as _0,M as d0}from"./inde
         }
     }
 `,R0=Fi.memo(({title:F,bgImageUrl:z,children:o,backFaceContent:an,frontFaceHeaderContent:j})=>{const[vn,X]=Dn.useState(!1),[ot,lt]=Dn.useState(!1),xt=()=>{lt(!0)},Vn=()=>{an&&X(!vn)};return L.jsxs(C0,{className:xo({show:ot,flip:vn}),onClick:Vn,children:[L.jsxs(hr,{children:[!ot&&L.jsx(y0,{children:"Loading..."}),L.jsx(ge,{src:z,onLoad:xt,loading:"lazy",alt:F}),L.jsxs($t,{children:[j&&L.jsx(I0,{children:j}),L.jsx("div",{children:o})]})]}),an&&L.jsxs(cr,{children:[L.jsx(ge,{src:z,onLoad:xt,loading:"lazy",alt:F}),L.jsx(ar,{children:L.jsx("div",{children:an})})]})]})}),L0=Fi.memo(({fullText:F,highlightText:z})=>{if(!F)return F;const o=new RegExp(`(${z})`,"gi");return F.split(o).map((j,vn)=>j.toLowerCase()==z.toLowerCase()?L.jsx("mark",{children:j},vn):j)}),S0=Q.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 20vw;
-  height: 20vw;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 20vw;
+    height: 20vw;
+    min-width: 200px;
+    min-height: 200px;
+    position: relative;
 `,T0=Q.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 10px;
-  margin-top: 10px;
-  font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-size: 0.8rem;
 `,E0=Fi.memo(({blogPost:F,filterText:z,popupBlogPost:o})=>L.jsx(S0,{children:L.jsx(R0,{title:F.title,bgImageUrl:`https://via.assets.so/game.png?id=${F.id}&q=95&w=360&h=360&fit=fill`,backFaceContent:z?L.jsx(L0,{fullText:F.body,highlightText:z}):F.body,frontFaceHeaderContent:L.jsx(T0,{onClick:()=>o(F),children:"Popup"}),children:F.title})})),O0=Q.div`
     position: absolute;
     top: 0;
