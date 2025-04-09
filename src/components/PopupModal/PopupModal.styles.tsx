@@ -61,3 +61,9 @@ export const PopupModalWindowClose = styled.div`
     cursor: pointer;
     padding: 5px;
 `;
+
+export const PopupWindowContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+`;

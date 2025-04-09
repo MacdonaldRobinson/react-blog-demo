@@ -6,6 +6,7 @@ import {
     PopupModalWindowClose,
     PopupModalWindowContent,
     PopupModalWindowTitle,
+    PopupWindowContentWrapper,
 } from "./PopupModal.styles";
 import clsx from "clsx";
 
@@ -39,8 +40,12 @@ const PopupModal = ({
                     <PopupModalWindowClose onClick={onPopupModelCloseCallback}>
                         X Close
                     </PopupModalWindowClose>
-                    <PopupModalWindowTitle>{title}</PopupModalWindowTitle>
-                    <PopupModalWindowContent>{content}</PopupModalWindowContent>
+                    <PopupWindowContentWrapper>
+                        <PopupModalWindowTitle>{title}</PopupModalWindowTitle>
+                        <PopupModalWindowContent>
+                            {content}
+                        </PopupModalWindowContent>
+                    </PopupWindowContentWrapper>
                 </WrapWithBgImage>
             </PopupModalWindow>
         </PopupModalBackDrop>
