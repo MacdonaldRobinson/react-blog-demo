@@ -1,7 +1,6 @@
 import { TChatMessage } from "../../contexts/ChatContext";
 import useChatContext from "../../hooks/useChatContext";
 import {
-    ChatMessaageWrapper,
     ChatMessageItemWrapper,
     ChatMessagesFieldSet,
     ChatMessagesFieldSetLegend,
