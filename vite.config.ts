@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      react(),
+      react()
     ],
     base: env.VITE_BASE_PATH || '/', // Set the base path dynamically from the environment variable
     test: {

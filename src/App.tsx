@@ -7,6 +7,7 @@ import PageLayout from "./pages/PageLayout/PageLayout";
 import { HeadProvider } from "react-head";
 import AuthContextProvider from "./auth/contexts/AuthContext/AuthContextProvider";
 import ChatContextProvider from "./chat/contexts/ChatContextProvider";
+import useFirebaseMessaging from "./firebase/hooks/useFirebaseMessaging/useFirebaseMessaging";
 
 const HomePage = React.lazy(() => import("../src/pages/HomePage/HomePage"));
 const BlogPage = React.lazy(() => import("../src/pages/BlogPage/BlogPage"));
@@ -48,6 +49,9 @@ const router = createBrowserRouter(
 );
 
 function App() {
+    const { registerServiceWorker } = useFirebaseMessaging();
+    registerServiceWorker();
+
     return (
         <HeadProvider>
             <AuthContextProvider>

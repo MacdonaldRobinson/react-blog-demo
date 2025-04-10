@@ -1,20 +1,20 @@
 import {store} from "../../../../firebase.config"
 import { query, getDocs, collection, orderBy, addDoc, onSnapshot, Timestamp} from "firebase/firestore"
 import { useCallback, useEffect } from "react";
-import {v4 as newGuid} from "uuid"
 
 type TChatMessage = {    
     userName: string;
     message: string;
+    userId:string;
 }
 
-type TChatMessageWithId = TChatMessage & {
-    id:string;
-    createdOn: Date;    
+type TChatMessageWithMetaInfo = TChatMessage & {
+    id?: string;
+    createdOn: Date;
 }
 
 export type TChatStore = {
-    onListenForUpdates:(newChatMessages:TChatMessageWithId[])=>void
+    onListenForUpdates:(newChatMessages:TChatMessageWithMetaInfo[])=>void
 }
 
 const chatMessagesRef = collection(store, "ChatMessages")
@@ -32,12 +32,13 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
 
         try{
             const unsubscribe = onSnapshot(queryRef, (snapshot)=>{
-                const newMessages: TChatMessageWithId[] =  snapshot.docs.map((docSnapShot)=>{
-                const snapshotData = docSnapShot.data() as TChatMessageWithId;
+                const newMessages: TChatMessageWithMetaInfo[] =  snapshot.docs.map((docSnapShot)=>{
+                const snapshotData = docSnapShot.data() as TChatMessageWithMetaInfo;
                     return {
                         ...snapshotData,
+                        id: docSnapShot.id,
                         createdOn: convertTimestampToDate(snapshotData.createdOn)
-                    } as TChatMessageWithId
+                    } as TChatMessageWithMetaInfo
                     
                 })
 
@@ -68,14 +69,15 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             const querySnapShot = await getDocs(queryRef)
 
             const chatMessages = querySnapShot.docs.map((docSnapShot)=>{                
-                const snapshotData = docSnapShot.data() as TChatMessageWithId;
+                const snapshotData = docSnapShot.data() as TChatMessageWithMetaInfo;
                 return {
                     ...snapshotData,
+                    id: snapshotData.id,
                     createdOn: convertTimestampToDate(snapshotData.createdOn)
-                } as TChatMessageWithId
+                } as TChatMessageWithMetaInfo
             })
 
-            return chatMessages as TChatMessageWithId[]
+            return chatMessages as TChatMessageWithMetaInfo[]
         }
         catch(e){
             console.error(e)
@@ -87,9 +89,8 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         try{
             console.log("useChatStore > sendMessage")
 
-            const updatedMessage:TChatMessageWithId = {                
+            const updatedMessage:TChatMessageWithMetaInfo = {                
                 ...message,
-                id: newGuid(),
                 createdOn: new Date(),                
             }
 

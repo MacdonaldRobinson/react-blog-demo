@@ -15,10 +15,9 @@ const ChatMessageInput = ({ userName, setUserName }: TChatMessageInput) => {
     const { sendMessage } = useChatContext();
 
     const [chatMessage, setChatMessage] = useState<TChatMessage>({
-        id: "",
         message: "",
         userName: userName,
-        createdOn: new Date(),
+        userId: "",
     });
 
     useEffect(() => {

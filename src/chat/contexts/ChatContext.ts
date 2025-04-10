@@ -1,22 +1,30 @@
 import { createContext } from "react";
-import { z } from "zod";
 
-export const ChatMessageSchema = z.object({
-    id: z.string(),
-    userName: z.string(),
-    message: z.string(),
-    createdOn: z.date()
-})
 
-export type TChatMessage = z.infer<typeof ChatMessageSchema>;
+export type TChatMessage = {    
+    userName: string;
+    message: string;
+    userId:string;
+}
+
+export type TChatMessageWithMetaInfo = TChatMessage & {
+    id?:string;
+    createdOn: Date;
+}
 
 export type TChatContext = {
     userName: string;
-    chatMessages: TChatMessage[],
+    chatMessages: TChatMessageWithMetaInfo[],
     sendMessage: (chatMessage:TChatMessage)=>Promise<void>;    
     setUserName: (newUserName: string) => void;
-    onListenForUpdates: (newChatMessages: TChatMessage[])=>void;
+    onListenForUpdates: (newChatMessages: TChatMessageWithMetaInfo[])=>void;
 }
+
+export type TUser = {
+    id: string;
+    userName: string;
+    fcmToken: string;
+};
 
 const ChatContext = createContext<TChatContext>({
     userName: "",
@@ -28,7 +36,7 @@ const ChatContext = createContext<TChatContext>({
         console.log(newUserName);
         throw new Error("Function not implemented.");
     },
-    onListenForUpdates: function (newChatMessages: TChatMessage[]): void {
+    onListenForUpdates: function (newChatMessages: TChatMessageWithMetaInfo[]): void {
         console.log(newChatMessages);
         throw new Error("Function not implemented.");
     }
