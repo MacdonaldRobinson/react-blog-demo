@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(), 
-      mkcert()
+      env.VITE_USE_HTTPS == "true" ? mkcert() : undefined
     ],
     base: env.VITE_BASE_PATH || '/', // Set the base path dynamically from the environment variable
     test: {
