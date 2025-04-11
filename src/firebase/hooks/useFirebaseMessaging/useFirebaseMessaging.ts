@@ -2,18 +2,17 @@ import { messaging, auth} from "../../firebase.config"
 import {getToken} from "firebase/messaging"
 import useFirebaseStore from "../useFirebaseStore/useFirebaseStore"
 import { TUser } from "../useFirebaseStore/collections/useUsersStore/useUsersStore"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 const useFirebaseMessaging = ()=>{
     const {useUsersStore} = useFirebaseStore()
     const {createUser,  getUserFromLocalStorage} = useUsersStore()
-    const [serviceWorkerRegistration, setServiceWorkerRegistration] = useState<ServiceWorkerRegistration | undefined>()
-    
+
     const requestToken = async ()=>{
         try{            
-            await navigator.serviceWorker.ready;
-            
-            console.log("RAN")
+            const serviceWorkerRegistration = await navigator.serviceWorker.getRegistration()
+
+            console.log("requestToken > serviceWorkerRegistration", serviceWorkerRegistration)
             
             const storedUser = await getUserFromLocalStorage();
 
@@ -22,6 +21,7 @@ const useFirebaseMessaging = ()=>{
                 const permission = await Notification.requestPermission();
 
                 if(permission == "granted"){
+                    console.log(serviceWorkerRegistration)
                     const token = await getToken(messaging, {
                         vapidKey: "BD4GRPfP3ESQ1wy3IjwQaz9nGsF-sfAn6pamO6GPGW5-uUYS2kAh28_leoxjRd8GWav6e7WHi2Ac8BmL7iCQ8HU",
                         serviceWorkerRegistration: serviceWorkerRegistration
@@ -56,10 +56,11 @@ const useFirebaseMessaging = ()=>{
                 const basePath = import.meta.env.VITE_BASE_PATH || "/"; // Default to '/' if not set
 
                 console.log("registerServiceWorker at scope > ", basePath)
-                await navigator.serviceWorker.register(`${basePath}firebase-messaging-sw.js`)
+                await navigator.serviceWorker.register(`${basePath}firebase-messaging-sw.js`,{
+                    scope: basePath
+                })
                 .then((registration) => {
-                    console.log("Service Worker registered:", );
-                    setServiceWorkerRegistration(registration)
+                    console.log("Service Worker registered:", registration);
                 })
                 .catch((error) => {
                     console.error("Service Worker registration failed:", error);                    
