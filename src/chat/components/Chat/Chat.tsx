@@ -37,8 +37,6 @@ const Chat = () => {
 
     useEffect(() => {
         setUserName(authUserName);
-
-        console.log(authUserName);
     }, [authUserName, setUserName]);
 
     useEffect(() => {

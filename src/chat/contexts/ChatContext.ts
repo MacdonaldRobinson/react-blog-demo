@@ -23,8 +23,10 @@ export type TChatContext = {
 
 export type TUser = {
     id: string;
-    userName: string;
     fcmToken: string;
+    authUserId: string;
+    createdOn: Date;
+    updatedOn: Date;
 };
 
 const ChatContext = createContext<TChatContext>({

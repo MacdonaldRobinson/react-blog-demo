@@ -1,28 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import {auth} from "../../firebase.config"
-import {signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User } from "firebase/auth"
+import {signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User} from "firebase/auth"
+import useFirebaseStore from "../useFirebaseStore/useFirebaseStore";
 
-const useFirebaseAuth = ()=>{
-    const [authUser, setAuthUser] = useState<User | null>(null);
-    
-    useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth, async (user)=>{
+const useFirebaseAuth = ()=>{    
+    const [authUser, setAuthUser] = useState<User | null>()
 
-            console.log("useFirebaseAuth > useEffect > onAuthStateChanged", user)
-            await setAuthUser(user)
-
-        })
-        
-        setAuthUser(auth.currentUser)
-        return ()=> unsubscribe()
-    },[])
+    const {useUsersStore} = useFirebaseStore()
+    const {getUserFromLocalStorage, updateUser} = useUsersStore()
 
     const login = useCallback(async ()=>{
         try{
             console.log("useFirebaseAuth > login")
-
-            const response = await signInWithPopup(auth, new GoogleAuthProvider())
-            setAuthUser(response.user)
+            await signInWithPopup(auth, new GoogleAuthProvider())
         }
         catch(e){
             console.error(e);
@@ -35,7 +25,6 @@ const useFirebaseAuth = ()=>{
             console.log("useFirebaseAuth > logout")
 
             await signOut(auth)
-            setAuthUser(null)
         }
         catch(e){
             console.error(e);
@@ -43,7 +32,26 @@ const useFirebaseAuth = ()=>{
         }
 
     },[])
+    
+    useEffect(()=>{
+        const unsubscribe = onAuthStateChanged(auth, async (user: User | null)=>{
+            setAuthUser(user)
 
+            const userInStorage = await getUserFromLocalStorage()
+
+            if(userInStorage){
+                console.log("useFirebaseAuth > onAuthStateChanged")    
+                
+                updateUser({
+                    ...userInStorage,
+                    authUserId: user?.uid ?? ""
+                })
+            }
+        })
+
+        return ()=> unsubscribe()
+    },[])
+    
     return {login, logout, authUser}
 }
 

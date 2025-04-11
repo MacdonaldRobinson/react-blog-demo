@@ -1,8 +1,8 @@
-import {store} from "../../../../firebase.config"
-import { query, getDocs, collection, orderBy, addDoc, onSnapshot, Timestamp} from "firebase/firestore"
+import {store, auth} from "../../../../firebase.config"
+import { query, getDocs, collection, orderBy, addDoc, onSnapshot} from "firebase/firestore"
 import { useCallback, useEffect } from "react";
 import useFirebaseStore from "../../useFirebaseStore";
-import useFirebaseAuth from "../../../useFirebaseAuth/useFirebaseAuth";
+import useFirebaseMessaging from "../../../useFirebaseMessaging/useFirebaseMessaging";
 
 type TChatMessage = {    
     userName: string;
@@ -23,15 +23,9 @@ export type TChatStore = {
 const chatMessagesRef = collection(store, "ChatMessages")
 
 const useChatStore = ({onListenForUpdates}:TChatStore)=>{
-    const {authUser} = useFirebaseAuth()
-    const {useUsersStore} = useFirebaseStore()
-    const {getUserFromLocalStorage, updateUser} = useUsersStore()
-
-    const convertTimestampToDate = (date: Date) =>{
-        return date instanceof Timestamp 
-                ? date.toDate() 
-                : new Date(date);
-    }
+    const {useUsersStore, convertTimestampToDate} = useFirebaseStore()
+    const {getUserFromLocalStorage,getUserById, clearUsersLocalStorage} = useUsersStore()    
+    const {requestToken} = useFirebaseMessaging()
 
     const listenForUpdates = useCallback(()=>{
         const queryRef = query(chatMessagesRef, orderBy("createdOn"))
@@ -58,7 +52,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[onListenForUpdates])
+    },[])
 
     const getChatMessages = useCallback(async ()=> {
         try{
@@ -83,17 +77,49 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         }
     },[])
 
+    const reCreateLocalStorage = async ()=>{
+
+        clearUsersLocalStorage()
+        
+        const userInStorage = await requestToken()
+
+        if(!userInStorage)
+        {
+            console.error("Error creating storage");            
+        }      
+        
+        return userInStorage;
+    }
+
     const sendMessage = useCallback(async (message: TChatMessage)=>{
         try{
             console.log("useChatStore > sendMessage")
 
-            const user = await getUserFromLocalStorage()
+            let userInStorage = await getUserFromLocalStorage()
+            
+            if(!userInStorage){
+                userInStorage = await reCreateLocalStorage() ?? userInStorage
+
+                if(!userInStorage)
+                {
+                    console.error("Error creating storage");
+                    return
+                }
+            }
+
+            const userInDb = await getUserById(userInStorage.id)
+
+            if(!userInDb)
+            {
+                console.error("Cannot find user id in db, clearing local storage")                
+                await reCreateLocalStorage()
+            }
 
             const updatedMessage:TChatMessageWithMetaInfo = {                
                 ...message,
                 createdOn: new Date(),                
-                userId: user?.id  ?? "",
-                authUserId: authUser?.uid?? ""
+                userId: userInDb?.id  ?? "",
+                authUserId: auth.currentUser?.uid?? ""
             }
 
             await addDoc(chatMessagesRef, updatedMessage)
@@ -102,20 +128,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[authUser?.uid, getUserFromLocalStorage])
-
-    const updateUserName = async (newUserName: string)=>{
-        const userInStorage = await getUserFromLocalStorage()
-
-        if(userInStorage){
-            return await updateUser({
-                ...userInStorage,
-                userName: newUserName
-            })
-        }
-
-        return userInStorage;
-    }
+    },[])
 
     useEffect(()=>{
         const unsubscribe = listenForUpdates()
@@ -123,9 +136,9 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         return ()=> {
             unsubscribe()
         }
-    },[listenForUpdates])
+    },[])
 
-    return {getChatMessages, sendMessage, updateUserName}
+    return {getChatMessages, sendMessage}
 }
 
 export default useChatStore;
