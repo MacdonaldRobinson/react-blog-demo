@@ -5,6 +5,7 @@ export type TChatMessage = {
     userName: string;
     message: string;
     userId:string;
+    authUserId: string;
 }
 
 export type TChatMessageWithMetaInfo = TChatMessage & {

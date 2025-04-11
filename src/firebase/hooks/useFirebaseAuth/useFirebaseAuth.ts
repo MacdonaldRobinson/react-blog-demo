@@ -1,15 +1,28 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {auth} from "../../firebase.config"
-import {signInWithPopup, GoogleAuthProvider, signOut, UserCredential} from "firebase/auth"
+import {signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User } from "firebase/auth"
 
 const useFirebaseAuth = ()=>{
-    const [user, setUser] = useState<UserCredential | null>(null);
+    const [authUser, setAuthUser] = useState<User | null>(null);
+    
+    useEffect(()=>{
+        const unsubscribe = onAuthStateChanged(auth, async (user)=>{
+
+            console.log("useFirebaseAuth > useEffect > onAuthStateChanged", user)
+            await setAuthUser(user)
+
+        })
+        
+        setAuthUser(auth.currentUser)
+        return ()=> unsubscribe()
+    },[])
+
     const login = useCallback(async ()=>{
         try{
             console.log("useFirebaseAuth > login")
 
-            const user = await signInWithPopup(auth, new GoogleAuthProvider())
-            setUser(user)
+            const response = await signInWithPopup(auth, new GoogleAuthProvider())
+            setAuthUser(response.user)
         }
         catch(e){
             console.error(e);
@@ -22,7 +35,7 @@ const useFirebaseAuth = ()=>{
             console.log("useFirebaseAuth > logout")
 
             await signOut(auth)
-            setUser(null)
+            setAuthUser(null)
         }
         catch(e){
             console.error(e);
@@ -31,7 +44,7 @@ const useFirebaseAuth = ()=>{
 
     },[])
 
-    return {login, logout, user}
+    return {login, logout, authUser}
 }
 
 export default useFirebaseAuth;

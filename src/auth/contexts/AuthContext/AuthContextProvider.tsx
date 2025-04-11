@@ -6,7 +6,7 @@ export type TAuthContextProvider = {
 };
 
 const AuthContextProvider = ({ children }: TAuthContextProvider) => {
-    const { login, logout, user } = useFirebaseAuth();
+    const { login, logout, authUser } = useFirebaseAuth();
 
     const handleLogin = async () => {
         await login();
@@ -17,8 +17,8 @@ const AuthContextProvider = ({ children }: TAuthContextProvider) => {
     };
 
     const newAuthContext: TAuthContext = {
-        userName: user?.user.displayName ?? "",
-        isAuthenticated: !!user,
+        userName: authUser?.displayName ?? "",
+        isAuthenticated: !!authUser,
         login: handleLogin,
         logout: handleLogout,
     };

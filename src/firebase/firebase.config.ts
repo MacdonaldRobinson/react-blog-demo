@@ -1,8 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getMessaging } from "firebase/messaging";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator} from "firebase/firestore";
+import { getMessaging} from "firebase/messaging";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -24,5 +25,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const store = getFirestore(app);
 const messaging = getMessaging(app);
+const functions = getFunctions(app);
+
+
+if (import.meta.env.VITE_USE_FIREBASE_EMULATORS === "true") {
+  console.log("🔌 Using Firebase emulators");
+
+  connectAuthEmulator(auth, "http://localhost:9099");
+  connectFirestoreEmulator(store, "localhost", 8081);
+  connectFunctionsEmulator(functions, "localhost", 5001);
+}
 
 export {auth, store, messaging}

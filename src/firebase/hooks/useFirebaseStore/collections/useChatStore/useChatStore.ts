@@ -1,11 +1,14 @@
 import {store} from "../../../../firebase.config"
 import { query, getDocs, collection, orderBy, addDoc, onSnapshot, Timestamp} from "firebase/firestore"
 import { useCallback, useEffect } from "react";
+import useFirebaseStore from "../../useFirebaseStore";
+import useFirebaseAuth from "../../../useFirebaseAuth/useFirebaseAuth";
 
 type TChatMessage = {    
     userName: string;
     message: string;
     userId:string;
+    authUserId:string;
 }
 
 type TChatMessageWithMetaInfo = TChatMessage & {
@@ -20,6 +23,9 @@ export type TChatStore = {
 const chatMessagesRef = collection(store, "ChatMessages")
 
 const useChatStore = ({onListenForUpdates}:TChatStore)=>{
+    const {authUser} = useFirebaseAuth()
+    const {useUsersStore} = useFirebaseStore()
+    const {getUserFromLocalStorage, updateUser} = useUsersStore()
 
     const convertTimestampToDate = (date: Date) =>{
         return date instanceof Timestamp 
@@ -54,14 +60,6 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         }
     },[onListenForUpdates])
 
-    useEffect(()=>{
-        const unsubscribe = listenForUpdates()
-
-        return ()=> {
-            unsubscribe()
-        }
-    },[listenForUpdates])
-
     const getChatMessages = useCallback(async ()=> {
         try{
             console.log("useChatStore > getChatMessages")
@@ -89,9 +87,13 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         try{
             console.log("useChatStore > sendMessage")
 
+            const user = await getUserFromLocalStorage()
+
             const updatedMessage:TChatMessageWithMetaInfo = {                
                 ...message,
                 createdOn: new Date(),                
+                userId: user?.id  ?? "",
+                authUserId: authUser?.uid?? ""
             }
 
             await addDoc(chatMessagesRef, updatedMessage)
@@ -100,9 +102,30 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[])
+    },[authUser?.uid, getUserFromLocalStorage])
 
-    return {getChatMessages, sendMessage}
+    const updateUserName = async (newUserName: string)=>{
+        const userInStorage = await getUserFromLocalStorage()
+
+        if(userInStorage){
+            return await updateUser({
+                ...userInStorage,
+                userName: newUserName
+            })
+        }
+
+        return userInStorage;
+    }
+
+    useEffect(()=>{
+        const unsubscribe = listenForUpdates()
+
+        return ()=> {
+            unsubscribe()
+        }
+    },[listenForUpdates])
+
+    return {getChatMessages, sendMessage, updateUserName}
 }
 
 export default useChatStore;

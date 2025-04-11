@@ -1,42 +1,132 @@
 import {store} from "../../../../firebase.config"
-import {collection, getDocs, query, orderBy, addDoc, doc, getDoc, where} from "firebase/firestore"
+import {collection, getDocs, query, orderBy, addDoc, doc, getDoc, where, updateDoc} from "firebase/firestore"
+import useFirebaseAuth from "../../../useFirebaseAuth/useFirebaseAuth";
+import { useCallback, useEffect } from "react";
 
-type TUserWithId = {
-    id: string;
-    userName: string;
-    fcmToken: string;
-}
 
 type TUser = {
     userName: string;
     fcmToken: string;
+    authUserId: string;
+}
+
+type TUserWithId = TUser & {
+    id: string;
 }
 
 const collectionName = "Users";
 const usersRef = collection(store, collectionName)
 
 const useUsersStore = ()=>{    
-    const useStorageKey = "User";
 
-    const getUserFromLocalStorage = async () => {
+    const {authUser} = useFirebaseAuth()
+
+    const updateUser = useCallback(async (user:TUserWithId, updateFirestore=false)=>{
+        try{
+            setUserInLocalStorage(user)
+            
+            if(!updateFirestore) return
+
+            console.log("useUsersStore > updateUser")
+            
+            const docRef = doc(store, collectionName, user.id)
+            
+            const updateData:TUser = {
+                authUserId: authUser?.uid ?? "",
+                userName: user.userName,
+                fcmToken: user.fcmToken
+            }
+
+            console.log(docRef)
+
+            await updateDoc(docRef, {    
+                ...updateData                            
+            })
+
+            const fetchUser = await getUserById(user.id);
+
+            if(fetchUser)
+            {
+                setUserInLocalStorage(fetchUser)
+            }
+
+            return fetchUser;
+        }
+        catch(e){
+            console.error(e)
+            throw e;
+        }
+    },[])
+
+    const getUserFromLocalStorage = useCallback(async () => {
         const foundItem = localStorage.getItem(useStorageKey);
 
         if (foundItem) {
-            const foundUser: TUserWithId = JSON.parse(foundItem);
+            const storedUser: TUserWithId = JSON.parse(foundItem);
 
-            await getUserById(foundUser.id)
+            if(storedUser) {
+                console.log("useUsersStore > getUserFromLocalStorage > foundInStorage", storedUser)
+                const user = await getUserById(storedUser.id);    
+                
+                if(!user){
+                    await clearUserFromLocalStorage()
+                    return null;
+                }
 
-            return foundUser;
+                if(user.id == storedUser.id)
+                {
+                    return user;                    
+                }
+                else
+                {
+                    return updateUser(user)
+                }
+            }            
+
+            return null;
         }
 
         return null;
-    };
+    },[updateUser]);    
+    
+    const handleOnAuthStateChanged = useCallback(async ()=>{
+        
+        console.log("useUsersStore > handleOnAuthStateChanged", authUser)
 
-    const clearUserLocalStorage = async () => {
+        if(!authUser){
+            clearUserFromLocalStorage()
+            return
+        }
+
+        const storedUser = await getUserFromLocalStorage()
+
+        if(storedUser)
+        {
+            const data:TUserWithId = {
+                ...storedUser,
+                userName: authUser?.displayName ?? "",
+                id: storedUser.id,
+                authUserId: authUser.uid
+            }
+            await setUserInLocalStorage(data)
+
+            return
+        }
+        
+        console.error("useUsersStore > onAuthStateChangedHandler > no localStorage for user found")
+    },[authUser, getUserFromLocalStorage])    
+
+    const useStorageKey = "User";
+
+
+
+    const clearUserFromLocalStorage = async () => {
         localStorage.removeItem(useStorageKey);
     };
 
     const setUserInLocalStorage = async (user: TUserWithId) => {
+        console.log("useUsersStore > setUserInLocalStorage", user)
+
         if(user.fcmToken == "" || user.id=="") 
             return;        
 
@@ -127,9 +217,25 @@ const useUsersStore = ()=>{
         }
     }
 
+
     const createUser = async (user: TUser) =>{
         try{
             console.log("useUsersStore > createUser")
+
+            const storedUser = await getUserFromLocalStorage();
+
+            if(storedUser && storedUser.fcmToken == user.fcmToken) {
+                console.log("useUsersStore > createUser > foundInStorage", storedUser)
+                const foundByToken = await getUsersByToken(storedUser.fcmToken);     
+
+                if(foundByToken.length == 1)
+                {
+                    return foundByToken[0]
+                }
+                {
+                    await clearUserFromLocalStorage()
+                }
+            }
 
             const foundByToken = await getUsersByToken(user.fcmToken);
 
@@ -140,26 +246,48 @@ const useUsersStore = ()=>{
             
             if(foundByToken.length == 1)
             {
+                const foundUser = foundByToken[0];
+
                 console.warn("Found user with the same token")
-                return foundByToken[0]
+                
+                const newStoredUser = await setUserInLocalStorage(foundUser)
+
+                return newStoredUser;
             }
             
             const userRef = await addDoc(usersRef, user)            
             
-            const updatedUser = {
+            const updatedUser: TUserWithId = {
                 ...user,
-                id: userRef.id
+                id: userRef.id,
+                authUserId: authUser?.uid ?? ""
             }
 
-            return updatedUser;
+            const newStoredUser = await setUserInLocalStorage(updatedUser)
+
+            if(newStoredUser)
+            {
+                return newStoredUser;
+            }
+
+            return null;
         }
         catch(e){
             console.error(e)
             throw e;
         }
-    }
+    }    
 
-    return {getUsers, getUserById, createUser, getUserFromLocalStorage, setUserInLocalStorage, clearUserLocalStorage}
+    useEffect(()=>{
+        console.log("useUsersStore > useEffect > onAuthChange")
+        const onAuthChange = async ()=>{
+            await handleOnAuthStateChanged()
+        }
+        onAuthChange()
+
+    }, [handleOnAuthStateChanged])
+
+    return {getUsers, getUserById, createUser, updateUser, getUserFromLocalStorage, handleOnAuthStateChanged}
 }
 
 export default useUsersStore;

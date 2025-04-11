@@ -10,17 +10,30 @@ import {
 } from "./Chat.styles";
 import ChatItem from "./ChatItem/ChatItem";
 import ChatMessageInput from "./ChatMessageInput/ChatMessageInput";
+import useFirebaseMessaging from "../../../firebase/hooks/useFirebaseMessaging/useFirebaseMessaging";
 
 const Chat = () => {
     const { userName: authUserName } = useAuthContext();
     const { userName, setUserName, chatMessages } = useChatContext();
     const chatMessagesRef = useRef<HTMLDivElement | null>(null);
+    const { registerServiceWorker } = useFirebaseMessaging();
 
     const scrollToLastMessage = () => {
         (
             chatMessagesRef.current?.lastChild as HTMLDivElement
         )?.scrollIntoView();
     };
+
+    useEffect(() => {
+        const register = async () => {
+            try {
+                await registerServiceWorker();
+            } catch (error) {
+                console.error("Failed to register service worker:", error);
+            }
+        };
+        register();
+    }, []);
 
     useEffect(() => {
         setUserName(authUserName);

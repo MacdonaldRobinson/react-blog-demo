@@ -22,17 +22,17 @@ const ChatContextProvider = ({ children }: TChatContextProvider) => {
     const [chatMessages, setChatMessages] =
         useState<TChatMessageWithMetaInfo[]>();
 
-    const { useChatStore, useUsersStore } = useFirebaseStore();
+    const { useChatStore } = useFirebaseStore();
     const { requestToken } = useFirebaseMessaging();
-    const { getUserFromLocalStorage, setUserInLocalStorage } = useUsersStore();
+
+    const handleRequestToken = useCallback(async () => {
+        const user = await requestToken();
+        if (user) {
+            setUser(user);
+        }
+    }, []);
 
     useEffect(() => {
-        const handleRequestToken = async () => {
-            const user = await requestToken();
-            if (user) {
-                setUser(user);
-            }
-        };
         handleRequestToken();
     }, []);
 
@@ -45,7 +45,7 @@ const ChatContextProvider = ({ children }: TChatContextProvider) => {
         []
     );
 
-    const { getChatMessages, sendMessage } = useChatStore({
+    const { getChatMessages, sendMessage, updateUserName } = useChatStore({
         onListenForUpdates: onListenForUpdates,
     });
 
@@ -59,24 +59,16 @@ const ChatContextProvider = ({ children }: TChatContextProvider) => {
     }, [getMessages]);
 
     const handleSendMessage = async (chatMessage: TChatMessage) => {
-        const user = await getUserFromLocalStorage();
-
-        await sendMessage({
-            ...chatMessage,
-            userId: user?.id ?? "",
-        });
+        await sendMessage(chatMessage);
     };
 
-    const handleSetUserName = useCallback(async (userName: string) => {
-        const user = await getUserFromLocalStorage();
-
-        if (user) {
-            await setUserInLocalStorage({
-                ...user,
-                userName: userName,
-            });
-        }
-    }, []);
+    const handleSetUserName = useCallback(
+        async (userName: string) => {
+            const user = await updateUserName(userName);
+            return user?.userName ?? "";
+        },
+        [updateUserName]
+    );
 
     const handleListenForUpdates = () => {};
 
