@@ -18,6 +18,7 @@ const ChatMessageInput = ({ userName, setUserName }: TChatMessageInput) => {
         message: "",
         userName: userName,
         userId: "",
+        authUserId: "",
     });
 
     useEffect(() => {
