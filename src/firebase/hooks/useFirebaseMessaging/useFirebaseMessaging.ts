@@ -49,7 +49,7 @@ const useFirebaseMessaging = ()=>{
             console.error(e)
             throw e;
         }
-    },[createUser, getUserFromLocalStorage])
+    },[])
 
     const registerServiceWorker = async ()=>{
             if("serviceWorker" in navigator){
@@ -78,7 +78,7 @@ const useFirebaseMessaging = ()=>{
             await requestToken()
         }
         register()
-    }, [requestToken])
+    }, [])
 
     return {requestToken, registerServiceWorker}
 }

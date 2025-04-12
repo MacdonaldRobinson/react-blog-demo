@@ -96,10 +96,6 @@ const Chat = () => {
     }, [authUserName, setUserName]);
 
     useEffect(() => {
-        console.log("showNotifications changed", showNotifications);
-    }, [showNotifications]);
-
-    useEffect(() => {
         const scroll = async () => {
             await scrollToLastMessage();
         };

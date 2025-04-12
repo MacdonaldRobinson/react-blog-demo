@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {auth} from "../../firebase.config"
 import {signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User} from "firebase/auth"
 import useFirebaseStore from "../useFirebaseStore/useFirebaseStore";
@@ -9,7 +9,7 @@ const useFirebaseAuth = ()=>{
     const {useUsersStore} = useFirebaseStore()
     const {getUserFromLocalStorage, updateUser} = useUsersStore()
 
-    const login = useCallback(async ()=>{
+    const login = async ()=>{
         try{
             console.log("useFirebaseAuth > login")
             await signInWithPopup(auth, new GoogleAuthProvider())
@@ -18,9 +18,9 @@ const useFirebaseAuth = ()=>{
             console.error(e);
             throw e;
         }
-    },[])
+    }
 
-    const logout = useCallback(async ()=>{
+    const logout = async ()=>{
         try{
             console.log("useFirebaseAuth > logout")
 
@@ -31,7 +31,7 @@ const useFirebaseAuth = ()=>{
             throw e;
         }
 
-    },[])
+    }
     
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, async (user: User | null)=>{
@@ -50,7 +50,7 @@ const useFirebaseAuth = ()=>{
         })
 
         return ()=> unsubscribe()
-    },[getUserFromLocalStorage, updateUser])
+    },[])
     
     return {login, logout, authUser}
 }

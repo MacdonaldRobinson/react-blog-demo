@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TChatMessage } from "../../../contexts/ChatContext";
 import {
     ChatMessageInputItemWrapper,
@@ -39,38 +39,42 @@ const ChatMessageInput = ({
         });
     }, [userName]);
 
-    const handleUserNameInput = (e: React.FormEvent<HTMLInputElement>) => {
-        if (!e) return;
+    const handleUserNameInput = useCallback(
+        (e: React.FormEvent<HTMLInputElement>) => {
+            if (!e) return;
 
-        const text = e.currentTarget.value;
+            const text = e.currentTarget.value;
 
-        const newMessage: TChatMessage = {
-            ...chatMessage,
-            userName: text,
-        };
+            const newMessage: TChatMessage = {
+                ...chatMessage,
+                userName: text,
+            };
 
-        setChatMessage(newMessage);
-        setUserName(newMessage.userName);
-    };
+            setChatMessage(newMessage);
+            setUserName(newMessage.userName);
+        },
+        [chatMessage, setUserName]
+    );
 
-    const handleMessageInput = (
-        e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        if (!e) return;
+    const handleMessageInput = useCallback(
+        (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+            if (!e) return;
 
-        const text = e.currentTarget.value;
+            const text = e.currentTarget.value;
 
-        const newMessage: TChatMessage = {
-            ...chatMessage,
-            message: text,
-        };
+            const newMessage: TChatMessage = {
+                ...chatMessage,
+                message: text,
+            };
 
-        setChatMessage(newMessage);
-    };
+            setChatMessage(newMessage);
+        },
+        [chatMessage]
+    );
 
-    const handleSendClick = async () => {
+    const handleSendClick = useCallback(async () => {
         await sendMessage(chatMessage);
-    };
+    }, [chatMessage, sendMessage]);
 
     return (
         <>

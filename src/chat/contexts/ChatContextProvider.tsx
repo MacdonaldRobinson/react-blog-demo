@@ -32,9 +32,12 @@ const ChatContextProvider = ({ children }: TChatContextProvider) => {
         onListenForUpdates: onListenForUpdates,
     });
 
-    const handleSendMessage = async (chatMessage: TChatMessage) => {
-        await sendMessage(chatMessage);
-    };
+    const handleSendMessage = useCallback(
+        async (chatMessage: TChatMessage) => {
+            await sendMessage(chatMessage);
+        },
+        [sendMessage]
+    );
 
     const handleListenForUpdates = () => {};
 

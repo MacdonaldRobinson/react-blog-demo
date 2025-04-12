@@ -1,6 +1,5 @@
 import {store, auth } from "../../../../firebase.config"
 import {collection, getDocs, query, orderBy, addDoc, doc, getDoc, where, updateDoc} from "firebase/firestore"
-import { useCallback } from "react";
 import useFirebaseStore from "../../useFirebaseStore";
 
 
@@ -32,7 +31,7 @@ const useUsersStore = ()=>{
         }        
     }
 
-    const getUserFromLocalStorage = useCallback(async () => {
+    const getUserFromLocalStorage = async () => {
         console.log("useUsersStore > getUserFromLocalStorage")
 
         const foundItem = localStorage.getItem(useStorageKey);
@@ -43,9 +42,9 @@ const useUsersStore = ()=>{
         }
 
         return null;
-    },[]);    
+    }   
     
-    const setUserInLocalStorage = useCallback(async (user: TUser) => {
+    const setUserInLocalStorage = async (user: TUser) => {
         try{            
             console.log("useUsersStore > setUserInLocalStorage", user)
     
@@ -73,7 +72,7 @@ const useUsersStore = ()=>{
             console.error(e)
             throw e
         }
-    },[]);
+    };
     
     const getUsers = async ()=>{
         try{
@@ -103,7 +102,7 @@ const useUsersStore = ()=>{
         }
     }
     
-    const getUserById = useCallback(async (id: string)=>{
+    const getUserById = async (id: string)=>{
 
         try{
             console.log("useUsersStore > getUserById")        
@@ -131,7 +130,7 @@ const useUsersStore = ()=>{
             console.error(e)
             throw e;
         }
-    },[convertTimestampToDate])
+    }
 
     const getUsersByToken = async (fcmToken: string)=>{
 
@@ -212,7 +211,7 @@ const useUsersStore = ()=>{
         }
     }    
 
-    const updateUser = useCallback(async (user:TUser, updateFirestore=false)=>{
+    const updateUser = async (user:TUser, updateFirestore=false)=>{
         try{
             console.log("useUsersStore > updateUser")
             await setUserInLocalStorage(user)
@@ -246,7 +245,7 @@ const useUsersStore = ()=>{
             console.error(e)
             throw e;
         }
-    },[getUserById, setUserInLocalStorage])    
+    }
 
     return {getUsers, getUserById, createUser, updateUser, getUserFromLocalStorage, clearUsersLocalStorage}
 }

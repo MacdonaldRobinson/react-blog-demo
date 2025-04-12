@@ -52,9 +52,9 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[convertTimestampToDate, onListenForUpdates])
+    },[])
 
-    const getChatMessages = useCallback(async ()=> {
+    const getChatMessages = async ()=> {
         try{
             console.log("useChatStore > getChatMessages")
             const queryRef = query(chatMessagesRef, orderBy("createdOn"))
@@ -75,9 +75,9 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[convertTimestampToDate])
+    }
 
-    const reCreateLocalStorage = useCallback(async ()=>{
+    const reCreateLocalStorage = async ()=>{
 
         clearUsersLocalStorage()
         
@@ -89,9 +89,9 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         }      
         
         return userInStorage;
-    },[clearUsersLocalStorage, requestToken])
+    }
 
-    const sendMessage = useCallback(async (message: TChatMessage)=>{
+    const sendMessage = async (message: TChatMessage)=>{
         try{
             console.log("useChatStore > sendMessage")
 
@@ -128,7 +128,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[getUserById, getUserFromLocalStorage, reCreateLocalStorage])
+    }
 
     useEffect(()=>{
         const unsubscribe = listenForUpdates()
@@ -136,7 +136,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         return ()=> {
             unsubscribe()
         }
-    },[listenForUpdates])
+    },[])
 
     return {getChatMessages, sendMessage}
 }
