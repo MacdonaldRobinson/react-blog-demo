@@ -1,4 +1,4 @@
-import{d as X,R as Fi,r as Dn,j as R,c as sr,B as p0,T as _0,M as d0}from"./index-o9YlGG8N.js";import{c as xo,a as v0,W as x0}from"./WrapWithBgImage-vsdE6iIB.js";const w0=X.div`
+import{d as X,R as Fi,r as Dn,j as R,c as sr,B as p0,T as _0,M as d0}from"./index-DYiIxpv2.js";import{c as xo,a as v0,W as x0}from"./WrapWithBgImage-CcF3W73S.js";const w0=X.div`
     padding: 10px;
 `,A0=X.div`
     display: flex;
