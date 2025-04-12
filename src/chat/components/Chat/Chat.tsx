@@ -19,37 +19,50 @@ const Chat = () => {
     const { registerServiceWorker } = useFirebaseMessaging();
     const notificationRef = useRef<HTMLAudioElement | null>(null);
 
-    const notify = useCallback(
-        async (chatMessage: TChatMessageWithMetaInfo) => {
-            const showNotification = () => {
-                const notification = new Notification(chatMessage.userName, {
-                    body: chatMessage.message,
+    const notify = useCallback(async (title: string, body: string) => {
+        const tag = new Date().getTime().toString();
+
+        const showNotification = () => {
+            if (title.trim().toLowerCase() != userName.trim().toLowerCase()) {
+                new Notification(title, {
+                    body: body,
+                    tag: tag,
+                    requireInteraction: false,
                 });
-
-                console.log(notification);
-            };
-
-            await notificationRef.current?.play();
-
-            if (Notification.permission !== "granted") {
-                Notification.requestPermission().then((permission) => {
-                    if (permission === "granted") {
-                        showNotification();
-                    }
-                });
-            } else {
-                showNotification();
             }
-        },
-        []
-    );
+        };
+
+        await notificationRef.current?.play();
+
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then((permission) => {
+                if (permission === "granted") {
+                    showNotification();
+                }
+            });
+        } else {
+            showNotification();
+        }
+    }, []);
 
     const scrollToLastMessage = useCallback(async () => {
         const lastElement = chatMessagesRef.current
             ?.lastChild as HTMLDivElement;
-        lastElement.scrollIntoView();
+        lastElement.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+        });
 
-        await notify(chatMessages[chatMessages.length - 1]);
+        if (!lastElement.classList.contains("notification-showed")) {
+            const userName = lastElement.childNodes[0]?.textContent?.trim();
+            const message = lastElement.childNodes[1]?.textContent?.trim();
+
+            if (userName && message) {
+                await notify(userName, message);
+
+                lastElement.classList.add("notification-showed");
+            }
+        }
     }, []);
 
     useEffect(() => {

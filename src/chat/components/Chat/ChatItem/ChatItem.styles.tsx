@@ -22,12 +22,21 @@ export const ChatMessageItemWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    opacity: 0;
 
     &.me {
         align-self: flex-start;
         background-color: lightgreen;
         border-radius: 20px 20px 20px 0;
     }
+
+    @keyframes Reveal {
+        to {
+            opacity: 1;
+        }
+    }
+
+    animation: Reveal 1s forwards;
 `;
 
 export const ChatMessageDateWrapper = styled.div`
