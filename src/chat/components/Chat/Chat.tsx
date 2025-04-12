@@ -63,19 +63,22 @@ const Chat = () => {
     const scrollToLastMessage = useCallback(async () => {
         const lastElement = chatMessagesRef.current
             ?.lastChild as HTMLDivElement;
-        lastElement.scrollIntoView({
-            behavior: "smooth",
-            block: "end",
-        });
 
-        if (!lastElement.classList.contains("notification-showed")) {
-            const userName = lastElement.childNodes[0]?.textContent?.trim();
-            const message = lastElement.childNodes[1]?.textContent?.trim();
+        if (lastElement) {
+            lastElement.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            });
 
-            if (userName && message) {
-                await notify(userName, message);
+            if (!lastElement.classList.contains("notification-showed")) {
+                const userName = lastElement.childNodes[0]?.textContent?.trim();
+                const message = lastElement.childNodes[1]?.textContent?.trim();
 
-                lastElement.classList.add("notification-showed");
+                if (userName && message) {
+                    await notify(userName, message);
+
+                    lastElement.classList.add("notification-showed");
+                }
             }
         }
     }, [notify]);
