@@ -50,7 +50,7 @@ const useFirebaseAuth = ()=>{
         })
 
         return ()=> unsubscribe()
-    },[])
+    },[getUserFromLocalStorage, updateUser])
     
     return {login, logout, authUser}
 }

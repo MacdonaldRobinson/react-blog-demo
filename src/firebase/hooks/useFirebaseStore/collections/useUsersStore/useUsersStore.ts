@@ -22,42 +22,6 @@ const usersRef = collection(store, collectionName)
 const useUsersStore = ()=>{        
     const {convertTimestampToDate} = useFirebaseStore()
 
-    const updateUser = useCallback(async (user:TUser, updateFirestore=false)=>{
-        try{
-            console.log("useUsersStore > updateUser")
-            await setUserInLocalStorage(user)
-
-            if(!updateFirestore) return
-
-            
-            const docRef = doc(store, collectionName, user.id)
-            
-            const updateData:TUserStoreData = {
-                authUserId: auth.currentUser?.uid?? "",
-                fcmToken: user.fcmToken,
-                createdOn: user.createdOn,
-                updatedOn: new Date()
-            }
-
-            await updateDoc(docRef, {    
-                ...updateData                            
-            })
-
-            const fetchUser = await getUserById(user.id);
-
-            if(fetchUser)
-            {
-                await setUserInLocalStorage(fetchUser)
-            }
-
-            return fetchUser;
-        }
-        catch(e){
-            console.error(e)
-            throw e;
-        }
-    },[])
-
     const clearUsersLocalStorage = ()=>{
         console.log("useUsersStore > clearUsersLocalStorage")
 
@@ -139,7 +103,7 @@ const useUsersStore = ()=>{
         }
     }
     
-    const getUserById = async (id: string)=>{
+    const getUserById = useCallback(async (id: string)=>{
 
         try{
             console.log("useUsersStore > getUserById")        
@@ -167,7 +131,7 @@ const useUsersStore = ()=>{
             console.error(e)
             throw e;
         }
-    }
+    },[convertTimestampToDate])
 
     const getUsersByToken = async (fcmToken: string)=>{
 
@@ -247,6 +211,42 @@ const useUsersStore = ()=>{
             throw e;
         }
     }    
+
+    const updateUser = useCallback(async (user:TUser, updateFirestore=false)=>{
+        try{
+            console.log("useUsersStore > updateUser")
+            await setUserInLocalStorage(user)
+
+            if(!updateFirestore) return
+
+            
+            const docRef = doc(store, collectionName, user.id)
+            
+            const updateData:TUserStoreData = {
+                authUserId: auth.currentUser?.uid?? "",
+                fcmToken: user.fcmToken,
+                createdOn: user.createdOn,
+                updatedOn: new Date()
+            }
+
+            await updateDoc(docRef, {    
+                ...updateData                            
+            })
+
+            const fetchUser = await getUserById(user.id);
+
+            if(fetchUser)
+            {
+                await setUserInLocalStorage(fetchUser)
+            }
+
+            return fetchUser;
+        }
+        catch(e){
+            console.error(e)
+            throw e;
+        }
+    },[getUserById, setUserInLocalStorage])    
 
     return {getUsers, getUserById, createUser, updateUser, getUserFromLocalStorage, clearUsersLocalStorage}
 }

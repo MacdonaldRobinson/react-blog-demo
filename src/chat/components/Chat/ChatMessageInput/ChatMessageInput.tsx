@@ -10,9 +10,16 @@ import useAuthContext from "../../../../auth/hooks/useAuthContext";
 export type TChatMessageInput = {
     userName: string;
     setUserName: (newUserName: string) => void;
+    showNotifications: boolean;
+    setShowNotifications: (showNotification: boolean) => void;
 };
 
-const ChatMessageInput = ({ userName, setUserName }: TChatMessageInput) => {
+const ChatMessageInput = ({
+    userName,
+    setUserName,
+    showNotifications,
+    setShowNotifications,
+}: TChatMessageInput) => {
     const { isAuthenticated } = useAuthContext();
     const { sendMessage } = useChatContext();
 
@@ -69,6 +76,16 @@ const ChatMessageInput = ({ userName, setUserName }: TChatMessageInput) => {
         <>
             {isAuthenticated && (
                 <ChatMessageInputWrapper>
+                    <div>
+                        <input
+                            type="checkbox"
+                            checked={showNotifications}
+                            onChange={(e) =>
+                                setShowNotifications(e.target.checked)
+                            }
+                        />{" "}
+                        Show notifications
+                    </div>
                     <ChatMessageInputItemWrapper>
                         <label htmlFor="userName">User Name</label>
                         <input

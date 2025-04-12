@@ -12,6 +12,7 @@ export type TChatContextProvider = {
 
 const ChatContextProvider = ({ children }: TChatContextProvider) => {
     const [userName, setUserName] = useState<string>("");
+    const [showNotifications, setShowNotifications] = useState<boolean>(true);
 
     const [chatMessages, setChatMessages] =
         useState<TChatMessageWithMetaInfo[]>();
@@ -43,6 +44,8 @@ const ChatContextProvider = ({ children }: TChatContextProvider) => {
         chatMessages: chatMessages ?? [],
         sendMessage: handleSendMessage,
         onListenForUpdates: handleListenForUpdates,
+        showNotifications: showNotifications,
+        setShowNotifications: setShowNotifications,
     };
 
     return (

@@ -2,13 +2,13 @@ import { messaging, auth} from "../../firebase.config"
 import {getToken} from "firebase/messaging"
 import useFirebaseStore from "../useFirebaseStore/useFirebaseStore"
 import { TUser } from "../useFirebaseStore/collections/useUsersStore/useUsersStore"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 
 const useFirebaseMessaging = ()=>{
     const {useUsersStore} = useFirebaseStore()
     const {createUser,  getUserFromLocalStorage} = useUsersStore()
 
-    const requestToken = async ()=>{
+    const requestToken = useCallback(async ()=>{
         try{            
             const serviceWorkerRegistration = await navigator.serviceWorker.getRegistration()
 
@@ -49,7 +49,7 @@ const useFirebaseMessaging = ()=>{
             console.error(e)
             throw e;
         }
-    }
+    },[createUser, getUserFromLocalStorage])
 
     const registerServiceWorker = async ()=>{
             if("serviceWorker" in navigator){
@@ -78,7 +78,7 @@ const useFirebaseMessaging = ()=>{
             await requestToken()
         }
         register()
-    }, [])
+    }, [requestToken])
 
     return {requestToken, registerServiceWorker}
 }

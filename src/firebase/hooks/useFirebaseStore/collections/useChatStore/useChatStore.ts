@@ -52,7 +52,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[])
+    },[convertTimestampToDate, onListenForUpdates])
 
     const getChatMessages = useCallback(async ()=> {
         try{
@@ -75,9 +75,9 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[])
+    },[convertTimestampToDate])
 
-    const reCreateLocalStorage = async ()=>{
+    const reCreateLocalStorage = useCallback(async ()=>{
 
         clearUsersLocalStorage()
         
@@ -89,7 +89,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         }      
         
         return userInStorage;
-    }
+    },[clearUsersLocalStorage, requestToken])
 
     const sendMessage = useCallback(async (message: TChatMessage)=>{
         try{
@@ -128,7 +128,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
             console.error(e)
             throw e;
         }
-    },[])
+    },[getUserById, getUserFromLocalStorage, reCreateLocalStorage])
 
     useEffect(()=>{
         const unsubscribe = listenForUpdates()
@@ -136,7 +136,7 @@ const useChatStore = ({onListenForUpdates}:TChatStore)=>{
         return ()=> {
             unsubscribe()
         }
-    },[])
+    },[listenForUpdates])
 
     return {getChatMessages, sendMessage}
 }

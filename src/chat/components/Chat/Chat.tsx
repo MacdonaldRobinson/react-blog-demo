@@ -14,36 +14,51 @@ import useFirebaseMessaging from "../../../firebase/hooks/useFirebaseMessaging/u
 
 const Chat = () => {
     const { userName: authUserName } = useAuthContext();
-    const { userName, setUserName, chatMessages } = useChatContext();
+    const {
+        userName,
+        setUserName,
+        chatMessages,
+        showNotifications,
+        setShowNotifications,
+    } = useChatContext();
     const chatMessagesRef = useRef<HTMLDivElement | null>(null);
     const { registerServiceWorker } = useFirebaseMessaging();
     const notificationRef = useRef<HTMLAudioElement | null>(null);
 
-    const notify = useCallback(async (title: string, body: string) => {
-        const tag = new Date().getTime().toString();
+    const notify = useCallback(
+        async (title: string, body: string) => {
+            const tag = new Date().getTime().toString();
 
-        const showNotification = () => {
-            if (title.trim().toLowerCase() != userName.trim().toLowerCase()) {
-                new Notification(title, {
-                    body: body,
-                    tag: tag,
-                    requireInteraction: false,
-                });
-            }
-        };
+            const showNotification = async () => {
+                console.log("showNotifications", showNotifications);
+                if (showNotifications) {
+                    await notificationRef.current?.play();
 
-        await notificationRef.current?.play();
-
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission().then((permission) => {
-                if (permission === "granted") {
-                    showNotification();
+                    if (
+                        title.trim().toLowerCase() !=
+                        userName.trim().toLowerCase()
+                    ) {
+                        new Notification(title, {
+                            body: body,
+                            tag: tag,
+                            requireInteraction: false,
+                        });
+                    }
                 }
-            });
-        } else {
-            showNotification();
-        }
-    }, []);
+            };
+
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission().then(async (permission) => {
+                    if (permission === "granted") {
+                        await showNotification();
+                    }
+                });
+            } else {
+                await showNotification();
+            }
+        },
+        [showNotifications, userName]
+    );
 
     const scrollToLastMessage = useCallback(async () => {
         const lastElement = chatMessagesRef.current
@@ -63,7 +78,7 @@ const Chat = () => {
                 lastElement.classList.add("notification-showed");
             }
         }
-    }, []);
+    }, [notify]);
 
     useEffect(() => {
         const register = async () => {
@@ -74,18 +89,22 @@ const Chat = () => {
             }
         };
         register();
-    }, []);
+    }, [registerServiceWorker]);
 
     useEffect(() => {
         setUserName(authUserName);
     }, [authUserName, setUserName]);
 
     useEffect(() => {
+        console.log("showNotifications changed", showNotifications);
+    }, [showNotifications]);
+
+    useEffect(() => {
         const scroll = async () => {
             await scrollToLastMessage();
         };
         scroll();
-    }, [chatMessages]);
+    }, [chatMessages, scrollToLastMessage]);
 
     return (
         <ChatWrapper>
@@ -110,7 +129,12 @@ const Chat = () => {
                     )}
                 </ChatMessagesWrapper>
             </ChatMessagesFieldSet>
-            <ChatMessageInput userName={userName} setUserName={setUserName} />
+            <ChatMessageInput
+                userName={userName}
+                setUserName={setUserName}
+                showNotifications={showNotifications}
+                setShowNotifications={setShowNotifications}
+            />
         </ChatWrapper>
     );
 };

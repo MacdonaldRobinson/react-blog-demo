@@ -16,9 +16,11 @@ export type TChatMessageWithMetaInfo = TChatMessage & {
 export type TChatContext = {
     userName: string;
     chatMessages: TChatMessageWithMetaInfo[],
+    showNotifications: boolean;
     sendMessage: (chatMessage:TChatMessage)=>Promise<void>;    
     setUserName: (newUserName: string) => void;
     onListenForUpdates: (newChatMessages: TChatMessageWithMetaInfo[])=>void;
+    setShowNotifications: (newNotificationStatus: boolean)=>void
 }
 
 export type TUser = {
@@ -32,15 +34,17 @@ export type TUser = {
 const ChatContext = createContext<TChatContext>({
     userName: "",
     chatMessages: [],
+    showNotifications: true,
     sendMessage: async () => {
         console.error("sendMessage is not implemented");
     },
-    setUserName: function (newUserName: string): void {
-        console.log(newUserName);
+    setUserName: function (): void {        
         throw new Error("Function not implemented.");
     },
-    onListenForUpdates: function (newChatMessages: TChatMessageWithMetaInfo[]): void {
-        console.log(newChatMessages);
+    onListenForUpdates: (function (): void {        
+        throw new Error("Function not implemented.");
+    }),
+    setShowNotifications: function (): void {
         throw new Error("Function not implemented.");
     }
 })
