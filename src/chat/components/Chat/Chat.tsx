@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import useAuthContext from "../../../auth/hooks/useAuthContext";
 import { TChatMessageWithMetaInfo } from "../../contexts/ChatContext";
 import useChatContext from "../../hooks/useChatContext";
@@ -17,12 +17,40 @@ const Chat = () => {
     const { userName, setUserName, chatMessages } = useChatContext();
     const chatMessagesRef = useRef<HTMLDivElement | null>(null);
     const { registerServiceWorker } = useFirebaseMessaging();
+    const notificationRef = useRef<HTMLAudioElement | null>(null);
 
-    const scrollToLastMessage = () => {
-        (
-            chatMessagesRef.current?.lastChild as HTMLDivElement
-        )?.scrollIntoView();
-    };
+    const notify = useCallback(
+        async (chatMessage: TChatMessageWithMetaInfo) => {
+            const showNotification = () => {
+                const notification = new Notification(chatMessage.userName, {
+                    body: chatMessage.message,
+                });
+
+                console.log(notification);
+            };
+
+            await notificationRef.current?.play();
+
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === "granted") {
+                        showNotification();
+                    }
+                });
+            } else {
+                showNotification();
+            }
+        },
+        []
+    );
+
+    const scrollToLastMessage = useCallback(async () => {
+        const lastElement = chatMessagesRef.current
+            ?.lastChild as HTMLDivElement;
+        lastElement.scrollIntoView();
+
+        await notify(chatMessages[chatMessages.length - 1]);
+    }, []);
 
     useEffect(() => {
         const register = async () => {
@@ -40,11 +68,17 @@ const Chat = () => {
     }, [authUserName, setUserName]);
 
     useEffect(() => {
-        scrollToLastMessage();
+        const scroll = async () => {
+            await scrollToLastMessage();
+        };
+        scroll();
     }, [chatMessages]);
 
     return (
         <ChatWrapper>
+            <audio ref={notificationRef}>
+                <source src="notification.mp3" />
+            </audio>
             <ChatMessagesFieldSet>
                 <ChatMessagesFieldSetLegend>
                     Chat Messages
@@ -57,7 +91,7 @@ const Chat = () => {
                                     key={chatMessage.id}
                                     userName={userName}
                                     chatMessage={chatMessage}
-                                ></ChatItem>
+                                />
                             );
                         }
                     )}
