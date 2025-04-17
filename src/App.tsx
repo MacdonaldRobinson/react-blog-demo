@@ -11,6 +11,7 @@ import ChatContextProvider from "./chat/contexts/ChatContextProvider";
 const HomePage = React.lazy(() => import("../src/pages/HomePage/HomePage"));
 const BlogPage = React.lazy(() => import("../src/pages/BlogPage/BlogPage"));
 const ChatPage = React.lazy(() => import("../src/pages/ChatPage/ChatPage"));
+const CMSPage = React.lazy(() => import("../src/pages/CMSPage/CMSPage"));
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,14 @@ const router = createBrowserRouter(
             element: (
                 <PageLayout>
                     <ChatPage />
+                </PageLayout>
+            ),
+        },
+        {
+            path: "/cms",
+            element: (
+                <PageLayout>
+                    <CMSPage />
                 </PageLayout>
             ),
         },
