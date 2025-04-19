@@ -3,6 +3,8 @@
 A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 
 ## Showcases the following:
+- **Chat Application**
+- **CMS Application**
 - React Router Dom
 - Lazy Loading of Pages using React.Lazy and Suspense
 - Using React.memo
@@ -22,4 +24,4 @@ A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 - Filter Blog Posts and highlight the filterText in the blog content, as it filters the list, it highligts the words
 - Dynamicly changing the base path based on the environment ( VITE_ environment variables from .env file based on environment)
 - Using github workflow to deploy to run tests before build and deploying to github pages
-- The workdflow caches the playwright browsers so the subsequent builds are substantially quicker 
+- The workdflow caches the playwright browsers so the subsequent builds are substantially quicker
