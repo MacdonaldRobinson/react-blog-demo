@@ -3,8 +3,8 @@
 A blog demo site: https://macdonaldrobinson.github.io/react-blog-demo/
 
 ## Showcases the following:
-- **Chat Application**
-- **CMS Application**
+- **Chat Application with live updates**
+- **CMS ( Content Management System ) Application with history**
 - React Router Dom
 - Lazy Loading of Pages using React.Lazy and Suspense
 - Using React.memo
